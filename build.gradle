@@ -13,15 +13,29 @@ repositories {
 }
 
 dependencies {
+
+	// Default Spring Boot Dependencies
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.apache.logging.log4j:log4j-api:2.18.0'
-	implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Database Dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Data Class Dependencies
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+	// Log Dependencies
+	implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
+	implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
+
+	// Swagger UI and Docs: Mapping Endpoints
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+
 }
 
 tasks.named('test') {
