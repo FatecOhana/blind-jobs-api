@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
+my.log
+
+### Dev Database ###
+database/dev
+
