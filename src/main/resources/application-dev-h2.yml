@@ -3,7 +3,7 @@ spring:
     console.enabled: true
 
   datasource:
-    url: jdbc:h2:file:./database/backup_data;MODE=MySQL
+    url: jdbc:h2:file:./database/dev/backup_data;MODE=MySQL
     username: admin
     password: admin
     driverClassName: org.h2.Driver
@@ -16,3 +16,5 @@ spring:
 logging.file:
   path: ./home/user
   name: my.log
+
+server.port: 5000
