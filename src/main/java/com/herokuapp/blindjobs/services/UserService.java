@@ -9,6 +9,7 @@ import com.herokuapp.blindjobs.services.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,10 +34,20 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
             throw new NotFoundException("UserModel can't be null");
         }
 
-        UserModel user = userRepository.save(value);
+        UserModel userSaved;
+
+        // Get the user in the database (if exists) and copy its values to the received user (value)
+        UserModel existentUser = userRepository.findById(value.getId()).orElse(null);
+        if (!UtilsValidation.isNull(existentUser)) {
+            BeanUtils.copyProperties(value, existentUser);
+            userSaved = userRepository.save(existentUser);
+        } else {
+            userSaved = userRepository.save(value);
+        }
+
 
         logger.info("Finished Upsert Register...");
-        return new OperationData<>(user);
+        return new OperationData<>(userSaved);
     }
 
     @Override

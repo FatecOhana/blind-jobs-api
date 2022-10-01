@@ -20,6 +20,7 @@ public class UserModel {
     // Unique Identifier
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     // Personal Values
@@ -69,4 +70,18 @@ public class UserModel {
     // User sStudent Qualification
 //    private List<SchoolQualification> schoolQualification;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (id == null || obj == null || getClass() != obj.getClass())
+            return false;
+        UserModel that = (UserModel) obj;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
 }
