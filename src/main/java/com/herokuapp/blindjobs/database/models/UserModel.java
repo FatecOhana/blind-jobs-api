@@ -55,7 +55,7 @@ public class UserModel {
     private DocumentTypes documentType;
 
     @Schema(description = "defines if a user is deleted. this tag allows you to retrieve possible excluded cases", defaultValue = "false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     // User Address Data
 //    private PersonalAddress address;

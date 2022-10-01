@@ -40,26 +40,29 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
     }
 
     @Override
-    public OperationData<UUID> softDeleteRegister(UserModel value) throws Exception {
+    public OperationData<UUID> softDeleteRegister(UUID value) throws Exception {
         logger.info("Soft Delete Register...");
         if (UtilsValidation.isNull(value)) {
-            throw new NotFoundException("UserModel can't be null");
-        } else if (UtilsValidation.isNull(value.getId())) {
-            throw new IllegalArgumentException(String.format("UserModel [%s] can't be null", "id"));
+            throw new NotFoundException("UserModel id can't be null");
         }
 
-        value.setIsDeleted(Boolean.TRUE);
-        userRepository.save(value);
+        UserModel user = userRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
+        if (UtilsValidation.isNull(user)) {
+            throw new NotFoundException(String.format("not found UserModel with id=[%s] and isDeleted=[%s]", value, false));
+        }
 
-        if (userRepository.findByIdAndIsDeletedIsFalse(value.getId()).isPresent()) {
+        user.setIsDeleted(Boolean.TRUE);
+        userRepository.save(user);
+
+        if (userRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
             throw new NotFoundException(String.format(
                     "UserModel: id=[%s], username=[%s], email=[%s] not configured with delet in database",
-                    value.getId(), value.getUsername(), value.getEmail())
+                    user.getId(), user.getUsername(), user.getEmail())
             );
         }
 
         logger.info("Finished Soft Delete Register...");
-        return new OperationData<>(value.getId());
+        return new OperationData<>(user.getId());
     }
 
     @Override
@@ -78,7 +81,7 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
 
         UserModel userModel = null;
         if (!UtilsValidation.isNull(id)) {
-            userModel = userRepository.findByIdAndIsDeleted(id, isDeleted).orElseThrow(() -> new NotFoundException(
+            userModel = userRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
                     String.format("not found user with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {

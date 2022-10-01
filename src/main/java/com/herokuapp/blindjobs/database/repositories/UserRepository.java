@@ -16,7 +16,9 @@ public interface UserRepository extends JpaRepository<UserModel, UUID> {
      */
     Optional<UserModel> findByIdAndIsDeletedIsFalse(UUID id);
 
-    Optional<UserModel> findByIdAndIsDeleted(UUID id, Boolean isDeleted);
+    List<UserModel> findAllByIsDeletedIs(Boolean isDeleted);
+
+    Optional<UserModel> findByIdAndIsDeletedIs(UUID id, Boolean isDeleted);
 
     Optional<UserModel> findByUsernameAndIsDeleted(String username, Boolean isDeleted);
 

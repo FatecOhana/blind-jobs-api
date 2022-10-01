@@ -25,27 +25,29 @@ public class UserRestEndpoint {
         try {
             return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("v1/user")
-    public ResponseEntity<?> softDeleteUser(@RequestBody SingleItemPayload<UserModel> userPayload) {
+    public ResponseEntity<?> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) {
         try {
             return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("v1/user")
-    public ResponseEntity<?> getUser(@RequestParam String id, @RequestParam String username, @RequestParam String name,
-                                     @RequestParam Boolean isDeleted) {
+    public ResponseEntity<?> getUser(@RequestParam(required = false) String id,
+                                     @RequestParam(required = false) String username,
+                                     @RequestParam(required = false) String name,
+                                     @RequestParam(required = false) boolean isDeleted) {
         try {
             UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
             return new ResponseEntity<>(userService.findRegister(uuid, name, username, isDeleted), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -55,7 +57,7 @@ public class UserRestEndpoint {
         try {
             return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

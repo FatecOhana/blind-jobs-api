@@ -14,7 +14,7 @@ public interface UniqueRegisterOperationsInterface<T> {
     /**
      * Sets true in tag isDeleted in specify object of table
      */
-    OperationData<UUID> softDeleteRegister(T value) throws Exception;
+    OperationData<UUID> softDeleteRegister(UUID value) throws Exception;
 
     /**
      * Update one register in Database
