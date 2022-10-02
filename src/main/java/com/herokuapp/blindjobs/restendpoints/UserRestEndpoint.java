@@ -5,6 +5,12 @@ import com.herokuapp.blindjobs.dto.OperationData;
 import com.herokuapp.blindjobs.dto.SingleItemPayload;
 import com.herokuapp.blindjobs.services.UserService;
 import com.herokuapp.blindjobs.services.utils.UtilsValidation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@Tag(name = "User", description = "Endpoint to manipulate and manage users and their data")
 public class UserRestEndpoint {
 
     private final UserService userService;
@@ -20,45 +27,45 @@ public class UserRestEndpoint {
         this.userService = userService;
     }
 
-    @PostMapping("v1/user")
-    public ResponseEntity<?> upsertUser(@RequestBody SingleItemPayload<UserModel> userPayload) {
-        try {
-            return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @Operation(summary = "Create or Update User values")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Created or Updated", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
+    ))
+    @PostMapping(value = "v1/user", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<UserModel> userPayload) throws Exception {
+        return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
     }
 
-    @DeleteMapping("v1/user")
-    public ResponseEntity<?> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) {
-        try {
-            return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @Operation(summary = "Delete (Soft-Delete) one User", description = "You only need to enter the User's ID in the request body")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Deleted", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
+    ))
+    @DeleteMapping(value = "v1/user", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<OperationData<?>> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) throws Exception {
+        return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
     }
 
-    @GetMapping("v1/user")
-    public ResponseEntity<?> getUser(@RequestParam(required = false) String id,
-                                     @RequestParam(required = false) String username,
-                                     @RequestParam(required = false) String name,
-                                     @RequestParam(required = false) boolean isDeleted) {
-        try {
-            UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
-            return new ResponseEntity<>(userService.findRegister(uuid, name, username, isDeleted), HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @Operation(summary = "Get database user values", description = "You must enter one of the filter values")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching  user values", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
+    ))
+    @GetMapping(value = "v1/user", produces = "application/json")
+    public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
+                                                    @RequestParam(required = false) String username,
+                                                    @RequestParam(required = false) String name,
+                                                    @RequestParam(required = false) boolean isDeleted) throws Exception {
+        UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
+        return new ResponseEntity<>(userService.findRegister(uuid, name, username, isDeleted), HttpStatus.OK);
     }
 
     // TODO ALLOW ONLY FOR MASTER ADMIN
-    @GetMapping("v1/user/all")
-    public ResponseEntity<?> getAllUser() {
-        try {
-            return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @Operation(summary = "Get all user values in database", description = "This method is only allowed for debug")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User Registers", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
+    ))
+    @GetMapping(value = "v1/user/all", produces = "application/json")
+    public ResponseEntity<OperationData<?>> getAllUser() {
+        return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
     }
 
 }
