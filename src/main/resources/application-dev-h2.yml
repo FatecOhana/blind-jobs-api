@@ -21,4 +21,5 @@ logging.file:
   name: my.log
 
 server.port: 8090
+
 springdoc.show-actuator: true
