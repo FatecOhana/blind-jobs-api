@@ -42,3 +42,4 @@ my.log
 ### Dev Database ###
 database/dev
 
+*.gz
