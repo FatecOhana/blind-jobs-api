@@ -28,6 +28,10 @@ public class UserModel {
     @Column(nullable = false)
     private String name;
 
+    @Schema(description = "lastName's user", example = "Luis")
+    @Column(nullable = false)
+    private String lastName;
+
     @Schema(description = "user's username", example = "gabriel_1513")
     @Column(unique = true, nullable = false)
     private String username;
