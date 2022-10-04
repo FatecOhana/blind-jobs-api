@@ -34,13 +34,15 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
             throw new NotFoundException("UserModel can't be null");
         }
 
-        UserModel userSaved;
+        UserModel userSaved = null;
 
         // Get the user in the database (if exists) and copy its values to the received user (value)
-        UserModel existentUser = userRepository.findById(value.getId()).orElse(null);
-        if (!UtilsValidation.isNull(existentUser)) {
-            BeanUtils.copyProperties(value, existentUser);
-            userSaved = userRepository.save(existentUser);
+        if (!UtilsValidation.isNull(value.getId())) {    //   if (!UtilsValidation.isNull(existentUser)) {
+            UserModel existentUser = userRepository.findById(value.getId()).orElse(null);
+            if (!UtilsValidation.isNull(existentUser)) {
+                BeanUtils.copyProperties(value, existentUser);
+                userSaved = userRepository.save(existentUser);
+            }
         } else {
             userSaved = userRepository.save(value);
         }

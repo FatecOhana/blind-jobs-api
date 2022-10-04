@@ -31,7 +31,7 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Created or Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
     ))
-    @PostMapping(value = "v1/user", produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<UserModel> userPayload) throws Exception {
         return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Deleted", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
     ))
-    @DeleteMapping(value = "v1/user", produces = "application/json", consumes = "application/json")
+    @DeleteMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationData<?>> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) throws Exception {
         return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching  user values", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
     ))
-    @GetMapping(value = "v1/user", produces = "application/json")
+    @GetMapping(value = "api/v1/user", produces = "application/json")
     public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
                                                     @RequestParam(required = false) String username,
                                                     @RequestParam(required = false) String name,
@@ -63,7 +63,7 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User Registers", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
     ))
-    @GetMapping(value = "v1/user/all", produces = "application/json")
+    @GetMapping(value = "api/v1/user/all", produces = "application/json")
     public ResponseEntity<OperationData<?>> getAllUser() {
         return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
     }
