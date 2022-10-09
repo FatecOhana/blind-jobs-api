@@ -39,8 +39,7 @@ public class UserRestEndpoint {
 
     @Operation(summary = "Check credential of User")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User checked", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
-    ))
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/login", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationData<?>> loginUser(@RequestBody SingleItemPayload<Login> userPayload) throws Exception {
         return new ResponseEntity<>(userService.checkCredential(userPayload.getData()), HttpStatus.OK);
@@ -48,8 +47,7 @@ public class UserRestEndpoint {
 
     @Operation(summary = "Delete (Soft-Delete) one User", description = "You only need to enter the User's ID in the request body")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Deleted", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
-    ))
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @DeleteMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationData<?>> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) throws Exception {
         return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
@@ -57,8 +55,7 @@ public class UserRestEndpoint {
 
     @Operation(summary = "Get database user values", description = "You must enter one of the filter values")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching  user values", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
-    ))
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user", produces = "application/json")
     public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
                                                     @RequestParam(required = false) String username,
@@ -71,8 +68,7 @@ public class UserRestEndpoint {
     // TODO ALLOW ONLY FOR MASTER ADMIN
     @Operation(summary = "Get all user values in database", description = "This method is only allowed for debug")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User Registers", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
-    ))
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user/all", produces = "application/json")
     public ResponseEntity<OperationData<?>> getAllUser() {
         return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.blindjobs.dto.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,5 +32,15 @@ public class GlobalExceptionHandlerController {
     public ResponseEntity<OperationData<?>> handleInternalException(NotFoundException ex) {
         return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ApiResponse(responseCode = "500", description = "Exception when manage Database values", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class)
+    ))
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<OperationData<?>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }
