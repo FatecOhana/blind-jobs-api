@@ -129,25 +129,4 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
         return new OperationData<>(new HashSet<>(userRepository.findAll()), null);
     }
 
-    public OperationData<?> checkCredential(Login data) throws Exception {
-        if (UtilsValidation.isNull(data)) {
-            throw new IllegalArgumentException("Login can't be null");
-        } else if (data.hasNullValue()) {
-            logger.error(String.format("Login has null value. credentialIdentification=[%s] and credentialValue=[%s]",
-                    UtilsValidation.isNull(data.getCredentialIdentification()), UtilsValidation.isNull(data.getCredentialValue())
-            ));
-            throw new IllegalArgumentException("Login has null value");
-        }
-
-        UserModel s = userRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
-                data.getCredentialValue(), Boolean.FALSE).orElse(null);
-        if (UtilsValidation.isNull(s)) {
-            logger.error(String.format("Not found user with credentialIdentification=[%s], credentialValue=[%s] and isDeleted=[%s]",
-                    data.getCredentialIdentification(), "******", Boolean.FALSE
-            ));
-            throw new NotFoundException("Not found user");
-        } else {
-            return new OperationData<>(s);
-        }
-    }
 }

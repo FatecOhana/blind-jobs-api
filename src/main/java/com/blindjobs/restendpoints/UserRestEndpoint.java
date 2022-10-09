@@ -37,14 +37,6 @@ public class UserRestEndpoint {
         return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
     }
 
-    @Operation(summary = "Check credential of User")
-    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User checked", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
-    @PostMapping(value = "api/v1/login", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> loginUser(@RequestBody SingleItemPayload<Login> userPayload) throws Exception {
-        return new ResponseEntity<>(userService.checkCredential(userPayload.getData()), HttpStatus.OK);
-    }
-
     @Operation(summary = "Delete (Soft-Delete) one User", description = "You only need to enter the User's ID in the request body")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Deleted", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
