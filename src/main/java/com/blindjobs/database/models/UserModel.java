@@ -1,6 +1,7 @@
 package com.blindjobs.database.models;
 
 import com.blindjobs.dto.types.DocumentTypes;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class UserModel {
 
     @Schema(description = "user's password. This password will be encrypted in the database", example = "gabriel852109712")
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     // Documents used in Register (CPF, CNPJ, RNE, RG)
