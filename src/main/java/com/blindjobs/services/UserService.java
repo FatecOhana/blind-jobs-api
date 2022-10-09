@@ -44,7 +44,9 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
                 BeanUtils.copyProperties(value, existentUser);
                 userSaved = userRepository.save(existentUser);
             }
-        } else {
+        }
+
+        if (UtilsValidation.isNull(userSaved)) {
             userSaved = userRepository.save(value);
         }
 

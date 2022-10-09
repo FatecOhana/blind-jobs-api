@@ -28,10 +28,10 @@ public class UserRestEndpoint {
         this.userService = userService;
     }
 
-    @Operation(summary = "Create or Update User values")
+    @Operation(summary = "Create or Update User values",
+            description = "If you pass the ID and there is a User in the corresponding database, it will be updated")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User Created or Updated", content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))
-    ))
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<UserModel> userPayload) throws Exception {
         return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
