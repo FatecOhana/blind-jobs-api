@@ -1,8 +1,11 @@
 package com.blindjobs.dto.types;
 
-public enum WorkModel {
-    HYBRID("HIBRIDO"), HOME_OFFICE("HOME_OFFICE"), PRESENTIAL("PRESENCIAL");
+import com.fasterxml.jackson.annotation.JsonValue;
 
+public enum WorkModel {
+    HYBRID("HIBRIDO"), HOME_OFFICE("HOME OFFICE"), PRESENTIAL("PRESENCIAL");
+
+    @JsonValue // Consider the string instead of the enum name
     private final String name;
 
     WorkModel(String name) {
