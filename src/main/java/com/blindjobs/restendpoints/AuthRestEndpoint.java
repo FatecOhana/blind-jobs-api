@@ -12,9 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Authentication", description = "Endpoint to manipulate and manage login")
@@ -26,12 +24,13 @@ public class AuthRestEndpoint {
         this.authService = authService;
     }
 
-    @Operation(summary = "Check user credential")
+    @Operation(summary = "Check credentials")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User checked", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
-    @PostMapping(value = "api/v1/user/login", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> loginUser(@RequestBody SingleItemPayload<Login> userPayload) throws Exception {
-        return new ResponseEntity<>(authService.checkCredential(userPayload.getData()), HttpStatus.OK);
+    @PostMapping(value = "api/v1/{module}/login", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<OperationData<?>> genericLoginV1(@RequestBody SingleItemPayload<Login> loginPayload,
+                                                           @PathVariable String module) throws Exception {
+        return new ResponseEntity<>(authService.checkCredential(loginPayload.getData(), module), HttpStatus.OK);
     }
 
 }

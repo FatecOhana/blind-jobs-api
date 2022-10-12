@@ -1,6 +1,6 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.models.UserModel;
+import com.blindjobs.database.repositories.EnterpriseRepository;
 import com.blindjobs.database.repositories.UserRepository;
 import com.blindjobs.dto.Login;
 import com.blindjobs.dto.OperationData;
@@ -15,25 +15,34 @@ public class AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final UserRepository userRepository;
+    private final EnterpriseRepository enterpriseRepository;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, EnterpriseRepository enterpriseRepository) {
         this.userRepository = userRepository;
+        this.enterpriseRepository = enterpriseRepository;
     }
 
-    public OperationData<?> checkCredential(Login data) throws Exception {
+    public OperationData<?> checkCredential(Login data, String module) throws Exception {
         if (UtilsValidation.isNull(data) || data.hasNullValue()) {
             throw new IllegalArgumentException("Login can't be null or contains null value");
         }
 
-        UserModel s = userRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
-                data.getCredentialValue(), Boolean.FALSE).orElse(null);
-        if (UtilsValidation.isNull(s)) {
-            logger.error(String.format("Not found user with credentialIdentification=[%s], credentialValue=[%s] and isDeleted=[%s]",
-                    data.getCredentialIdentification(), "******", Boolean.FALSE
+        Object value = switch (module) {
+            case "user" -> userRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
+                    data.getCredentialValue(), Boolean.FALSE).orElse(null);
+            case "enterprise" ->
+                    enterpriseRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
+                            data.getCredentialValue(), Boolean.FALSE).orElse(null);
+            default -> null;
+        };
+
+        if (UtilsValidation.isNull(value)) {
+            logger.error(String.format("Not found [%s] with credentialIdentification=[%s], credentialValue=[%s] and isDeleted=[%s]",
+                    module, data.getCredentialIdentification(), "******", Boolean.FALSE
             ));
-            throw new NotFoundException("Not found user");
+            throw new NotFoundException(String.format("Not found %s", module));
         } else {
-            return new OperationData<>(s);
+            return new OperationData<>(value);
         }
     }
 }
