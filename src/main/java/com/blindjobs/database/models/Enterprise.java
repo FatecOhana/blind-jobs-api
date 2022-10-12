@@ -30,7 +30,7 @@ public class Enterprise {
     private String name;
 
     @Schema(description = "resumed name of enterprise", example = "Nestl CIA")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Schema(description = "enterprise's phone", example = "119284928470")
