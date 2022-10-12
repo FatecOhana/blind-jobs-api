@@ -34,24 +34,24 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<Ente
             throw new NotFoundException("Enterprise can't be null");
         }
 
-        Enterprise userSaved = null;
+        Enterprise enterpriseSaved = null;
 
-        // Get the user in the database (if exists) and copy its values to the received user (value)
+        // Get the enterprise in the database (if exists) and copy its values to the received enterprise (value)
         if (!UtilsValidation.isNull(value.getId())) {    //   if (!UtilsValidation.isNull(existentUser)) {
             Enterprise existentUser = enterpriseRepository.findById(value.getId()).orElse(null);
             if (!UtilsValidation.isNull(existentUser)) {
                 BeanUtils.copyProperties(value, existentUser);
-                userSaved = enterpriseRepository.save(existentUser);
+                enterpriseSaved = enterpriseRepository.save(existentUser);
             }
         }
 
-        if (UtilsValidation.isNull(userSaved)) {
-            userSaved = enterpriseRepository.save(value);
+        if (UtilsValidation.isNull(enterpriseSaved)) {
+            enterpriseSaved = enterpriseRepository.save(value);
         }
 
 
         logger.info("Finished Upsert Register...");
-        return new OperationData<>(userSaved);
+        return new OperationData<>(enterpriseSaved);
     }
 
     @Override
@@ -61,23 +61,23 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<Ente
             throw new NotFoundException("Enterprise id can't be null");
         }
 
-        Enterprise user = enterpriseRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
-        if (UtilsValidation.isNull(user)) {
+        Enterprise enterprise = enterpriseRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
+        if (UtilsValidation.isNull(enterprise)) {
             throw new NotFoundException(String.format("not found Enterprise with id=[%s] and isDeleted=[%s]", value, false));
         }
 
-        user.setIsDeleted(Boolean.TRUE);
-        enterpriseRepository.save(user);
+        enterprise.setIsDeleted(Boolean.TRUE);
+        enterpriseRepository.save(enterprise);
 
-        if (enterpriseRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
+        if (enterpriseRepository.findByIdAndIsDeletedIsFalse(enterprise.getId()).isPresent()) {
             throw new NotFoundException(String.format(
-                    "Enterprise: id=[%s], username=[%s], email=[%s] not configured with delet in database",
-                    user.getId(), user.getUsername(), user.getEmail())
+                    "Enterprise: id=[%s], uniqueKey=[%s], email=[%s] not configured with delet in database",
+                    enterprise.getId(), enterprise.getUsername(), enterprise.getEmail())
             );
         }
 
         logger.info("Finished Soft Delete Register...");
-        return new OperationData<>(user.getId());
+        return new OperationData<>(enterprise.getId());
     }
 
     @Override
@@ -91,17 +91,17 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<Ente
     }
 
     @Override
-    public OperationData<?> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception {
+    public OperationData<Enterprise> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
 
-        Enterprise userModel = null;
+        Enterprise enterprise = null;
         if (!UtilsValidation.isNull(id)) {
-            userModel = enterpriseRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found user with id=[%s] and isDeleted=[%s]", id, isDeleted)
+            enterprise = enterpriseRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
+                    String.format("not found enterprise with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            userModel = enterpriseRepository.findByUsernameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found user with username=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
+            enterprise = enterpriseRepository.findByUsernameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
+                    String.format("not found enterprise with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
             ));
         }
 
@@ -110,11 +110,11 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<Ente
             values = enterpriseRepository.findByNameAndIsDeleted(name, isDeleted);
         }
 
-        if (!UtilsValidation.isNull(userModel)) {
-            values.add(userModel);
+        if (!UtilsValidation.isNull(enterprise)) {
+            values.add(enterprise);
         } else if (UtilsValidation.isNullOrEmpty(values)) {
             throw new NotFoundException(String.format(
-                    "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                    "not found values in database to combination id=[%s], name=[%s], uniqueKey=[%s], isDeleted=[%s]",
                     id, name, uniqueKey, isDeleted
             ));
         }
