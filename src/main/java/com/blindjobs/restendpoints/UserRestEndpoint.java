@@ -50,11 +50,11 @@ public class UserRestEndpoint {
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user", produces = "application/json")
     public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
-                                                    @RequestParam(required = false) String username,
+                                                    @RequestParam(required = false) String uniqueName,
                                                     @RequestParam(required = false) String name,
                                                     @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
-        return new ResponseEntity<>(userService.findRegister(uuid, name, username, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 
     // TODO ALLOW ONLY FOR MASTER ADMIN

@@ -49,11 +49,11 @@ public class EnterpriseRestEndpoint {
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/enterprise", produces = "application/json")
     public ResponseEntity<OperationData<?>> getCompany(@RequestParam(required = false) String id,
-                                                       @RequestParam(required = false) String enterpriseUsername,
+                                                       @RequestParam(required = false) String uniqueName,
                                                        @RequestParam(required = false) String name,
                                                        @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
-        return new ResponseEntity<>(enterpriseService.findRegister(uuid, name, enterpriseUsername, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(enterpriseService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all enterprise values in database", description = "This method is only allowed for debug")
