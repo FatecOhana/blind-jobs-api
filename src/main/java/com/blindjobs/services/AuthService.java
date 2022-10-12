@@ -1,11 +1,11 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.repositories.EnterpriseRepository;
-import com.blindjobs.database.repositories.UserRepository;
+import com.blindjobs.database.repositories.entities.EnterpriseRepository;
+import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.Login;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
-import com.blindjobs.services.utils.UtilsValidation;
+import com.blindjobs.utils.UtilsValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

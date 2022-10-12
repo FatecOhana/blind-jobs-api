@@ -1,6 +1,6 @@
 package com.blindjobs.dto;
 
-import com.blindjobs.services.utils.UtilsValidation;
+import com.blindjobs.utils.UtilsValidation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

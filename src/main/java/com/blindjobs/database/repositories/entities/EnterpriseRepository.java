@@ -1,6 +1,6 @@
-package com.blindjobs.database.repositories;
+package com.blindjobs.database.repositories.entities;
 
-import com.blindjobs.database.models.Enterprise;
+import com.blindjobs.database.models.entities.Enterprise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

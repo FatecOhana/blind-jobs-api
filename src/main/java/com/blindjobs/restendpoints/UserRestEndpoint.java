@@ -1,11 +1,10 @@
 package com.blindjobs.restendpoints;
 
-import com.blindjobs.database.models.UserModel;
-import com.blindjobs.dto.Login;
+import com.blindjobs.database.models.entities.UserModel;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.UserService;
-import com.blindjobs.services.utils.UtilsValidation;
+import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

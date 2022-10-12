@@ -1,6 +1,6 @@
 package com.blindjobs.dto;
 
-import com.blindjobs.services.utils.UtilsValidation;
+import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.blindjobs.services.utils;
+package com.blindjobs.services.interfaces;
 
 import com.blindjobs.dto.OperationData;
 

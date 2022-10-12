@@ -1,11 +1,11 @@
 package com.blindjobs.restendpoints;
 
-import com.blindjobs.database.models.Job;
+import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.Payload;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.JobService;
-import com.blindjobs.services.utils.UtilOperation;
+import com.blindjobs.utils.UtilsOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -71,7 +71,7 @@ public class JobRestEndpoint {
                                                    @RequestParam(required = false) String uniqueName,
                                                    @RequestParam(required = false) String name,
                                                    @RequestParam(required = false) boolean isDeleted) throws Exception {
-        UUID uuid = UtilOperation.convertStringToUUID(id);
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(jobService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 
@@ -83,7 +83,7 @@ public class JobRestEndpoint {
                                                                 @RequestParam(required = false) Set<String> uniqueName,
                                                                 @RequestParam(required = false) Set<String> name,
                                                                 @RequestParam(required = false) boolean isDeleted) throws Exception {
-        Set<UUID> uuids = UtilOperation.convertStringsToUUIDs(id);
+        Set<UUID> uuids = UtilsOperation.convertStringsToUUIDs(id);
         return new ResponseEntity<>(jobService.findManyMatchRegisters(uuids, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 

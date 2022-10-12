@@ -1,4 +1,4 @@
-package com.blindjobs.services.utils;
+package com.blindjobs.utils;
 
 import java.util.Collection;
 

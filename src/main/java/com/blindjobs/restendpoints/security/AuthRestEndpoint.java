@@ -1,4 +1,4 @@
-package com.blindjobs.restendpoints;
+package com.blindjobs.restendpoints.security;
 
 import com.blindjobs.dto.Login;
 import com.blindjobs.dto.OperationData;

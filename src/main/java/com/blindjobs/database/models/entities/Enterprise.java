@@ -1,4 +1,4 @@
-package com.blindjobs.database.models;
+package com.blindjobs.database.models.entities;
 
 import com.blindjobs.dto.types.DocumentTypes;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class UserModel {
+public class Enterprise {
 
     // Unique Identifier
     @Id
@@ -25,56 +25,47 @@ public class UserModel {
     private UUID id;
 
     // Personal Values
-    @Schema(description = "name's user", example = "Gabriel")
+    @Schema(description = "complete name of enterprise", example = "Nestl CIA Ilimited and Working")
     @Column(nullable = false)
     private String name;
 
-    @Schema(description = "lastName's user", example = "Luis")
-    @Column(nullable = false)
-    private String lastName;
-
-    @Schema(description = "user's username", example = "gabriel_1513")
-    @Column(unique = true, nullable = false)
+    @Schema(description = "resumed name of enterprise", example = "Nestl CIA")
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Schema(description = "user's phone", example = "119284928470")
+    @Schema(description = "enterprise's phone", example = "119284928470")
     private String contactNumber;
 
+    @Schema(description = "enterprise's public contact email", example = "company@somecompany.com.ua")
+    private String contactEmail;
 
     // Acess Data
-    @Schema(description = "user's email", example = "gabriel@email.com")
+    @Schema(description = "enterprise private email", example = "comapnyprivate@somecompany.com")
     @Column(unique = true, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String email;
 
-    @Schema(description = "user's password. This password will be encrypted in the database", example = "gabriel852109712")
+    @Schema(description = "enterprise's password. This password will be encrypted in the database", example = "enterprise852109712")
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     // Documents used in Register (CPF, CNPJ, RNE, RG)
-    @Schema(description = "user's document value. Only the numbers will be saved in the database", example = "12346578901")
+    @Schema(description = "enterprise's document value. Only the numbers will be saved in the database", example = "12346578901")
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String documentValue;
 
-    @Schema(description = "user's document type. Defines the type of document inserted", example = "CPF")
+    @Schema(description = "enterprise's document type. Defines the type of document inserted", example = "CNPJ")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DocumentTypes documentType;
 
-    @Schema(description = "defines if a user is deleted. this tag allows you to retrieve possible excluded cases", defaultValue = "false")
+    @Schema(description = "defines if a enterprise is deleted. this tag allows you to retrieve possible excluded cases", defaultValue = "false")
     private Boolean isDeleted = Boolean.FALSE;
 
     // User Address Data
 //    private PersonalAddress address;
-
-    // User Skills and Qualifications
-//    private List<Skills> skills;
-
-    // User Professional History (Jobs, Ongs, etc)
-//    private List<WorkExperience> workExperiences;
-
-    // User sStudent Qualification
-//    private List<SchoolQualification> schoolQualification;
 
     @Override
     public boolean equals(Object obj) {
@@ -82,7 +73,7 @@ public class UserModel {
             return true;
         if (id == null || obj == null || getClass() != obj.getClass())
             return false;
-        UserModel that = (UserModel) obj;
+        Enterprise that = (Enterprise) obj;
         return id.equals(that.id);
     }
 

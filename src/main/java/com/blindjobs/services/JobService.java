@@ -1,12 +1,11 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.models.Job;
-import com.blindjobs.database.models.Job;
-import com.blindjobs.database.repositories.JobRepository;
+import com.blindjobs.database.models.entities.Job;
+import com.blindjobs.database.repositories.entities.JobRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
-import com.blindjobs.services.utils.ManyRegisterOperationsInterface;
-import com.blindjobs.services.utils.UtilsValidation;
+import com.blindjobs.services.interfaces.ManyRegisterOperationsInterface;
+import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.blindjobs.restendpoints.config;
+package com.blindjobs.restendpoints.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

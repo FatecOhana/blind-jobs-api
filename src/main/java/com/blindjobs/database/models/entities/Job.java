@@ -1,4 +1,4 @@
-package com.blindjobs.database.models;
+package com.blindjobs.database.models.entities;
 
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
