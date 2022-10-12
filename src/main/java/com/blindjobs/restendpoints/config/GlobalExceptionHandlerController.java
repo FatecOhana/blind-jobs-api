@@ -5,22 +5,25 @@ import com.blindjobs.dto.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandlerController {
 
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandlerController.class);
+
     @ApiResponse(responseCode = "404", description = "Not Found Value in Database or in Resources", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class)
     ))
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<OperationData<?>> handleNotFoundException(NotFoundException ex) {
+        logger.error("an exception occurred", ex);
         return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.NOT_FOUND);
     }
 
@@ -28,8 +31,8 @@ public class GlobalExceptionHandlerController {
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class)
     ))
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<OperationData<?>> handleInternalException(NotFoundException ex) {
+    public ResponseEntity<OperationData<?>> handleInternalException(Exception ex) {
+        logger.error("an exception occurred", ex);
         return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -37,8 +40,8 @@ public class GlobalExceptionHandlerController {
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class)
     ))
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<OperationData<?>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        logger.error("an exception occurred", ex);
         return new ResponseEntity<>(new OperationData<>(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
