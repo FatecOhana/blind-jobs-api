@@ -3,12 +3,14 @@ package com.blindjobs.dto;
 import com.blindjobs.services.utils.UtilsValidation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collections;
 import java.util.Set;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class OperationData<T> {
@@ -43,5 +45,31 @@ public class OperationData<T> {
         this.totalErrors = 1L;
     }
 
+    /**
+     * Add one item in data
+     *
+     * @param item to be added into data
+     */
+    public void addInData(T item) {
+        this.data.add(item);
+    }
 
+    /**
+     * Add many items in data
+     *
+     * @param items to be added into data
+     */
+    public void addInData(Set<T> items) {
+        this.data.addAll(items);
+    }
+
+    /**
+     * Set erros and your quantity
+     *
+     * @param errors existent in operation
+     */
+    public void setErrors(String errors) {
+        this.errors = errors;
+        this.totalErrors = UtilsValidation.isNullOrEmpty(errors) ? null : (long) errors.length();
+    }
 }

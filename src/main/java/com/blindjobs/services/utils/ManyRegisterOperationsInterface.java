@@ -15,7 +15,7 @@ public interface ManyRegisterOperationsInterface<T> extends UniqueRegisterOperat
     /**
      * Sets true in tag isDeleted in many object of table
      */
-    OperationData<UUID> softDeleteRegisters(Set<T> value) throws Exception;
+    OperationData<UUID> softDeleteRegisters(Set<UUID> value) throws Exception;
 
     /**
      * Find Matches Register in Database
