@@ -44,38 +44,38 @@ public class Job {
     private String description;
 
     // Work Specifications
-    @Schema(description = "period of working", defaultValue = "AFTERNOON")
+    @Schema(description = "period of working", example = "TARDE")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DayPeriod periodJob;
 
-    @Schema(description = "model of working", defaultValue = "HOME_OFFICE")
+    @Schema(description = "model of working", example = "HOME OFFICE")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private WorkModel workModel;
 
-    @Schema(description = "type of job contract", defaultValue = "CLT")
+    @Schema(description = "type of job contract", example = "CLT")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContractType contractType;
 
 
-    @Schema(description = "weekly working hours", defaultValue = "CLT")
-    @Column(nullable = false, precision = 2)
+    @Schema(description = "weekly working hours", example = "40.0")
+    @Column(nullable = false)
     private Double weekHours;
 
-    @Schema(description = "number of working days", defaultValue = "CLT")
-    @Column(nullable = false, precision = 2)
+    @Schema(description = "number of working days", example = "5")
+    @Column(nullable = false)
     private Double daysInWeek;
 
 
     // Job offers
-    @Schema(description = "sets the minimum wage", defaultValue = "1250.00")
+    @Schema(description = "sets the minimum wage", example = "1250.00")
     @Column(precision = 2)
     private Double startSalaryRange;
 
-    @Schema(description = "sets the max wage", defaultValue = "3000.00")
-    @Column(precision = 2)
+    @Schema(description = "sets the max wage", example = "3000.00")
+    @Column(nullable = false)
     private Double limitSalaryRange;
 
 //    private Set<Benefits> benefits;
