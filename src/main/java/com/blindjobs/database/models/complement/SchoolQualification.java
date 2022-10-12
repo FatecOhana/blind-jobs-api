@@ -1,4 +1,4 @@
-package com.blindjobs.database.models;
+package com.blindjobs.database.models.complement;
 
 // TODO: Pending class mapping and implementation
 //@AllArgsConstructor

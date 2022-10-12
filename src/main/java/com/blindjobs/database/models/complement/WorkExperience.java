@@ -1,4 +1,4 @@
-package com.blindjobs.database.models;
+package com.blindjobs.database.models.complement;
 
 // TODO: Pending class mapping and implementation
 //@AllArgsConstructor
@@ -6,8 +6,7 @@ package com.blindjobs.database.models;
 //@Getter
 //@Setter
 //@Entity
-public class PersonalAddress {
-
+public class WorkExperience {
     // Unique Identifier
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
