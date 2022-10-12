@@ -1,6 +1,7 @@
 package com.blindjobs.database.models.entities;
 
 import com.blindjobs.dto.types.DocumentTypes;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -66,6 +69,12 @@ public class Enterprise {
 
     // User Address Data
 //    private PersonalAddress address;
+
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "enterprise")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Job> jobs = new HashSet<>();
 
     @Override
     public boolean equals(Object obj) {

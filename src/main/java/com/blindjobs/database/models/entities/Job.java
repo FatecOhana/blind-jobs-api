@@ -3,6 +3,7 @@ package com.blindjobs.database.models.entities;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -77,6 +78,10 @@ public class Job {
     @Schema(description = "sets the max wage", example = "3000.00")
     @Column(nullable = false)
     private Double limitSalaryRange;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    private Enterprise enterprise;
 
 //    private Set<Benefits> benefits;
 

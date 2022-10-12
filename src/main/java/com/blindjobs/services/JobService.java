@@ -1,5 +1,6 @@
 package com.blindjobs.services;
 
+import com.blindjobs.database.models.entities.Enterprise;
 import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.database.repositories.entities.JobRepository;
 import com.blindjobs.dto.OperationData;
@@ -19,9 +20,11 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
 
     private static final Logger logger = LoggerFactory.getLogger(JobService.class);
     private final JobRepository jobRepository;
+    private final EnterpriseService enterpriseService;
 
-    public JobService(JobRepository jobRepository) {
+    public JobService(JobRepository jobRepository, EnterpriseService enterpriseService) {
         this.jobRepository = jobRepository;
+        this.enterpriseService = enterpriseService;
     }
 
     @Override
@@ -188,5 +191,27 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     @Override
     public OperationData<?> findAllRegister() throws Exception {
         return new OperationData<>(new HashSet<>(jobRepository.findAll()), null);
+    }
+
+
+    public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, boolean isDeleted) throws Exception {
+        logger.info("Get All Jobs Of Enterprise...");
+
+        Enterprise enterprise = enterpriseService.findRegister(id, name, uniqueKey, isDeleted).getData()
+                .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
+                        "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                        id, name, uniqueKey, isDeleted)));
+
+        Set<Job> values = jobRepository.findByEnterprise_IdAndIsDeletedIs(enterprise.getId(), Boolean.FALSE);
+
+        if (UtilsValidation.isNullOrEmpty(values)) {
+            throw new NotFoundException(String.format(
+                    "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                    id, name, uniqueKey, isDeleted
+            ));
+        }
+
+        logger.info("Finished Get All Jobs Of Enterprise...");
+        return new OperationData<>(values);
     }
 }

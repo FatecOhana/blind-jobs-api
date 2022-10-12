@@ -95,4 +95,17 @@ public class JobRestEndpoint {
         return new ResponseEntity<>(jobService.findAllRegister(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all job of specify Enterprise")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All Job Registers", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
+    @GetMapping(value = "api/v1/job/enterprise", produces = "application/json")
+    public ResponseEntity<OperationData<?>> getAllJobOfEnterprise(@RequestParam(required = false) String id,
+                                                                  @RequestParam(required = false) String uniqueName,
+                                                                  @RequestParam(required = false) String name,
+                                                                  @RequestParam(required = false) boolean isDeleted) throws Exception {
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
+        return new ResponseEntity<>(jobService.findAllJobsOfEnterprise(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
+    }
+
+
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -15,6 +16,8 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
      * Get only register not deleted (configured with tag "isDeleted") in database
      */
     Optional<Job> findByIdAndIsDeletedIsFalse(UUID id);
+
+    Set<Job> findByEnterprise_IdAndIsDeletedIs(UUID id, Boolean isDeleted);
 
     List<Job> findAllByIsDeletedIs(Boolean isDeleted);
 
