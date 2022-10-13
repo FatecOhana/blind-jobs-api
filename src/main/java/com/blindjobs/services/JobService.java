@@ -212,6 +212,6 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
         }
 
         logger.info("Finished Get All Jobs Of Enterprise...");
-        return new OperationData<>(values);
+        return new OperationData<>(values, null);
     }
 }

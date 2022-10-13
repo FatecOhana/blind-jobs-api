@@ -31,11 +31,6 @@ public class Address extends BaseEntity {
     @Schema(description = "optional address complement", example = "Bl 1, Apto 1512")
     private String complement;
 
-    @JsonManagedReference("address-reference")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(mappedBy = "address")
-    private Set<Job> jobs = new HashSet<>();
-
     public Address(UUID id, String name, String identifierName, Boolean isDeleted, String cep, String complement) {
         super(id, name, identifierName, isDeleted);
         this.cep = cep;

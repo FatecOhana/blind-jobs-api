@@ -4,7 +4,6 @@ import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -80,10 +79,9 @@ public class Job {
     @Column(nullable = false)
     private Double limitSalaryRange;
 
-    @JsonBackReference("enterprise-reference")
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Enterprise enterprise;
-    @JsonBackReference("address-reference")
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     private Address address;
 

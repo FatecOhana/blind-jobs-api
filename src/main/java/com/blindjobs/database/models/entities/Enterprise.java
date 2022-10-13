@@ -64,17 +64,12 @@ public class Enterprise {
     @Column(nullable = false)
     private DocumentTypes documentType;
 
-    @Schema(description = "defines if a enterprise is deleted. this tag allows you to retrieve possible excluded cases", defaultValue = "false")
+    @Schema(description = "defines if a enterprise is deleted. this tag allows you to retrieve possible excluded cases",
+            defaultValue = "false")
     private Boolean isDeleted = Boolean.FALSE;
 
     // User Address Data
 //    private PersonalAddress address;
-
-
-    @JsonManagedReference("enterprise-reference")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(mappedBy = "enterprise")
-    private Set<Job> jobs = new HashSet<>();
 
     @Override
     public boolean equals(Object obj) {
