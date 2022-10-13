@@ -4,6 +4,7 @@ import com.blindjobs.database.models.entities.Enterprise;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.EnterpriseService;
+import com.blindjobs.utils.UtilsOperation;
 import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,7 +53,7 @@ public class EnterpriseRestEndpoint {
                                                        @RequestParam(required = false) String uniqueName,
                                                        @RequestParam(required = false) String name,
                                                        @RequestParam(required = false) boolean isDeleted) throws Exception {
-        UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(enterpriseService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 

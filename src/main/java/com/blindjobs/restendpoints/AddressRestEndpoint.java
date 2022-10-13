@@ -4,6 +4,7 @@ import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.AddressService;
+import com.blindjobs.utils.UtilsOperation;
 import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,7 +53,7 @@ public class AddressRestEndpoint {
                                                     @RequestParam(required = false) String uniqueName,
                                                     @RequestParam(required = false) String name,
                                                     @RequestParam(required = false) boolean isDeleted) throws Exception {
-        UUID uuid = UtilsValidation.isNullOrEmpty(id) ? null : UUID.fromString(id);
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(addressService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
     }
 
