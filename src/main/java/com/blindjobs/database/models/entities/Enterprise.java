@@ -71,9 +71,9 @@ public class Enterprise {
 //    private PersonalAddress address;
 
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "enterprise")
+    @JsonManagedReference("enterprise-reference")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @OneToMany(mappedBy = "enterprise")
     private Set<Job> jobs = new HashSet<>();
 
     @Override

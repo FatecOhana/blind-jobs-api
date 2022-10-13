@@ -1,5 +1,6 @@
 package com.blindjobs.database.models.entities;
 
+import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
@@ -79,9 +80,12 @@ public class Job {
     @Column(nullable = false)
     private Double limitSalaryRange;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference("enterprise-reference")
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Enterprise enterprise;
+    @JsonBackReference("address-reference")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    private Address address;
 
 //    private Set<Benefits> benefits;
 
@@ -89,7 +93,6 @@ public class Job {
 
 //    private Set<UserModel> userApplications;
 //    private Enterprise userApplications;
-//    private PersonalAddress address;
 
     @Override
     public boolean equals(Object obj) {
