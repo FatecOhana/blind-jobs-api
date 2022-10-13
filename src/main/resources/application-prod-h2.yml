@@ -7,8 +7,8 @@ spring:
 
   datasource:
     url: jdbc:h2:file:./database/dev/backup_data;MODE=MySQL
-    username: admin
-    password: admin
+    username: OmyCaroSeRaC
+    password: UaTgEe0M6b&95jj^u8*x
     driverClassName: org.h2.Driver
 
   jpa:
@@ -21,3 +21,5 @@ logging.file:
   name: my.log
 
 server.port: 8090
+
+springdoc.show-actuator: true
