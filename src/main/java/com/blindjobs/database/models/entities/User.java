@@ -20,8 +20,8 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-public class UniqueUser extends BaseEntity {
+@Entity(name = "TB_USER")
+public class User extends BaseEntity {
 
     @Schema(description = "user's tyoe", example = "ESTUDANTE")
     @Enumerated(EnumType.STRING)
@@ -66,7 +66,7 @@ public class UniqueUser extends BaseEntity {
             return true;
         if (UtilsValidation.isNull(obj) || getClass() != obj.getClass() || UtilsValidation.isNull(super.getId()))
             return false;
-        UniqueUser that = (UniqueUser) obj;
+        User that = (User) obj;
         return super.getId().equals(that.getId());
     }
 

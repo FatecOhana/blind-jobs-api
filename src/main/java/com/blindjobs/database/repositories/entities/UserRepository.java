@@ -1,6 +1,6 @@
 package com.blindjobs.database.repositories.entities;
 
-import com.blindjobs.database.models.entities.UserModel;
+import com.blindjobs.database.models.entities.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,20 +9,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, UUID> {
+public interface UserRepository extends JpaRepository<Student, UUID> {
 
     /**
      * Get only register not deleted (configured with tag "isDeleted") in database
      */
-    Optional<UserModel> findByIdAndIsDeletedIsFalse(UUID id);
+    Optional<Student> findByIdAndIsDeletedIsFalse(UUID id);
 
-    List<UserModel> findAllByIsDeletedIs(Boolean isDeleted);
+    List<Student> findAllByIsDeletedIs(Boolean isDeleted);
 
-    Optional<UserModel> findByIdAndIsDeletedIs(UUID id, Boolean isDeleted);
+    Optional<Student> findByIdAndIsDeletedIs(UUID id, Boolean isDeleted);
 
-    Optional<UserModel> findByIdentifierNameAndIsDeleted(String username, Boolean isDeleted);
+    Optional<Student> findByIdentifierNameAndIsDeleted(String username, Boolean isDeleted);
 
-    List<UserModel> findByNameAndIsDeleted(String name, Boolean isDeleted);
+    List<Student> findByNameAndIsDeleted(String name, Boolean isDeleted);
 
-    Optional<UserModel> findByEmailAndPasswordAndIsDeleted(String email, String password, Boolean isDeleted);
+    Optional<Student> findByEmailAndPasswordAndIsDeleted(String email, String password, Boolean isDeleted);
 }

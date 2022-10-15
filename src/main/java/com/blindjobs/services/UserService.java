@@ -4,7 +4,6 @@ import com.blindjobs.database.models.entities.User;
 import com.blindjobs.database.repositories.entities.UniqueUserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
-import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,13 +18,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class EnterpriseService implements UniqueRegisterOperationsInterface<User> {
+public class UserService implements UniqueRegisterOperationsInterface<User> {
 
-    private static final Logger logger = LoggerFactory.getLogger(EnterpriseService.class);
-    private static final UserType USER_TYPE = UserType.ENTERPRISE;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UniqueUserRepository uniqueUserRepository;
 
-    public EnterpriseService(UniqueUserRepository uniqueUserRepository) {
+    public UserService(UniqueUserRepository uniqueUserRepository) {
         this.uniqueUserRepository = uniqueUserRepository;
     }
 
@@ -36,24 +34,24 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<User
             throw new NotFoundException("UniqueUser can't be null");
         }
 
-        User enterprise = null;
+        User user = null;
 
-        // Get the enterprise in the database (if exists) and copy its values to the received enterprise (value)
+        // Get the uniqueUser in the database (if exists) and copy its values to the received uniqueUser (value)
         if (!UtilsValidation.isNull(value.getId())) {
             User existentUser = uniqueUserRepository.findById(value.getId()).orElse(null);
             if (!UtilsValidation.isNull(existentUser)) {
                 BeanUtils.copyProperties(value, existentUser);
-                enterprise = uniqueUserRepository.save(existentUser);
+                user = uniqueUserRepository.save(existentUser);
             }
         }
 
-        if (UtilsValidation.isNull(enterprise)) {
-            enterprise = uniqueUserRepository.save(value);
+        if (UtilsValidation.isNull(user)) {
+            user = uniqueUserRepository.save(value);
         }
 
 
         logger.info("Finished Upsert Register...");
-        return new OperationData<>(enterprise);
+        return new OperationData<>(user);
     }
 
     @Override
@@ -63,23 +61,23 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<User
             throw new NotFoundException("UniqueUser id can't be null");
         }
 
-        User enterprise = uniqueUserRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
-        if (UtilsValidation.isNull(enterprise)) {
+        User user = uniqueUserRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
+        if (UtilsValidation.isNull(user)) {
             throw new NotFoundException(String.format("not found UniqueUser with id=[%s] and isDeleted=[%s]", value, false));
         }
 
-        enterprise.setIsDeleted(Boolean.TRUE);
-        uniqueUserRepository.save(enterprise);
+        user.setIsDeleted(Boolean.TRUE);
+        uniqueUserRepository.save(user);
 
-        if (uniqueUserRepository.findByIdAndIsDeletedIsFalse(enterprise.getId()).isPresent()) {
+        if (uniqueUserRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
             throw new NotFoundException(String.format(
                     "UniqueUser: id=[%s], uniqueKey=[%s], email=[%s] not configured with delet in database",
-                    enterprise.getId(), enterprise.getIdentifierName(), enterprise.getEmail())
+                    user.getId(), user.getIdentifierName(), user.getEmail())
             );
         }
 
         logger.info("Finished Soft Delete Register...");
-        return new OperationData<>(enterprise.getId());
+        return new OperationData<>(user.getId());
     }
 
     @Override
@@ -96,14 +94,14 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<User
     public OperationData<User> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
 
-        User enterprise = null;
+        User user = null;
         if (!UtilsValidation.isNull(id)) {
-            enterprise = uniqueUserRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found enterprise with id=[%s] and isDeleted=[%s]", id, isDeleted)
+            user = uniqueUserRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
+                    String.format("not found uniqueUser with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            enterprise = uniqueUserRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found enterprise with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
+            user = uniqueUserRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
+                    String.format("not found uniqueUser with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
             ));
         }
 
@@ -112,8 +110,8 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<User
             values = uniqueUserRepository.findByNameAndIsDeleted(name, isDeleted);
         }
 
-        if (!UtilsValidation.isNull(enterprise)) {
-            values.add(enterprise);
+        if (!UtilsValidation.isNull(user)) {
+            values.add(user);
         } else if (UtilsValidation.isNullOrEmpty(values)) {
             throw new NotFoundException(String.format(
                     "not found values in database to combination id=[%s], name=[%s], uniqueKey=[%s], isDeleted=[%s]",
@@ -127,7 +125,7 @@ public class EnterpriseService implements UniqueRegisterOperationsInterface<User
 
     @Override
     public OperationData<?> findAllRegister() {
-        return new OperationData<>(new HashSet<>(uniqueUserRepository.findAllByUserType(USER_TYPE)), null);
+        return new OperationData<>(new HashSet<>(uniqueUserRepository.findAll()), null);
     }
 
 }

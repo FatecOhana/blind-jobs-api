@@ -3,7 +3,6 @@ package com.blindjobs.database.models.entities;
 import com.blindjobs.utils.UtilsValidation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -12,8 +11,8 @@ import javax.persistence.Entity;
 //@NoArgsConstructor
 @Getter
 @Setter
-@Entity
-public class UserModel extends UniqueUser {
+@Entity(name = "TB_STUDENT")
+public class Student extends User {
 
     // User Skills and Qualifications
 //    private List<Skills> skills;
@@ -30,7 +29,7 @@ public class UserModel extends UniqueUser {
             return true;
         if (UtilsValidation.isNull(obj) || getClass() != obj.getClass() || UtilsValidation.isNull(super.getId()))
             return false;
-        UniqueUser that = (UniqueUser) obj;
+        User that = (User) obj;
         return super.getId().equals(that.getId());
     }
 
