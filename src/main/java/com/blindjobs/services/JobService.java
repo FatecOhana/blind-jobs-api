@@ -20,11 +20,11 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
 
     private static final Logger logger = LoggerFactory.getLogger(JobService.class);
     private final JobRepository jobRepository;
-    private final EnterpriseService enterpriseService;
+    private final UserService userService;
 
-    public JobService(JobRepository jobRepository, EnterpriseService enterpriseService) {
+    public JobService(JobRepository jobRepository, UserService userService) {
         this.jobRepository = jobRepository;
-        this.enterpriseService = enterpriseService;
+        this.userService = userService;
     }
 
     @Override
@@ -197,7 +197,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, boolean isDeleted) throws Exception {
         logger.info("Get All Jobs Of UniqueUser...");
 
-        User enterprise = enterpriseService.findRegister(id, name, uniqueKey, isDeleted).getData()
+        User enterprise = userService.findRegister(id, name, uniqueKey, isDeleted).getData()
                 .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         id, name, uniqueKey, isDeleted)));
