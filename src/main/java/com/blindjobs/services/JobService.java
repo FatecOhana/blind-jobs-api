@@ -1,6 +1,6 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.models.entities.Enterprise;
+import com.blindjobs.database.models.entities.UniqueUser;
 import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.database.repositories.entities.JobRepository;
 import com.blindjobs.dto.OperationData;
@@ -195,9 +195,9 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
 
 
     public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, boolean isDeleted) throws Exception {
-        logger.info("Get All Jobs Of Enterprise...");
+        logger.info("Get All Jobs Of UniqueUser...");
 
-        Enterprise enterprise = enterpriseService.findRegister(id, name, uniqueKey, isDeleted).getData()
+        UniqueUser enterprise = enterpriseService.findRegister(id, name, uniqueKey, isDeleted).getData()
                 .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         id, name, uniqueKey, isDeleted)));
@@ -211,7 +211,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
             ));
         }
 
-        logger.info("Finished Get All Jobs Of Enterprise...");
+        logger.info("Finished Get All Jobs Of UniqueUser...");
         return new OperationData<>(values, null);
     }
 }

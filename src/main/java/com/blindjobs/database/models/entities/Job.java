@@ -80,7 +80,7 @@ public class Job {
     private Double limitSalaryRange;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    private Enterprise enterprise;
+    private UniqueUser enterprise;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     private Address address;
