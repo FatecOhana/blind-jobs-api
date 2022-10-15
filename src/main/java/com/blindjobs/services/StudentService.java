@@ -4,6 +4,7 @@ import com.blindjobs.database.models.entities.UserModel;
 import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
+import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
@@ -18,12 +19,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UserService implements UniqueRegisterOperationsInterface<UserModel> {
+public class StudentService implements UniqueRegisterOperationsInterface<UserModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private static final UserType USER_TYPE = UserType.STUDENT;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public StudentService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -71,8 +73,8 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
 
         if (userRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
             throw new NotFoundException(String.format(
-                    "UserModel: id=[%s], username=[%s], email=[%s] not configured with delet in database",
-                    user.getId(), user.getUsername(), user.getEmail())
+                    "UserModel: id=[%s], identifierName=[%s], email=[%s] not configured with delet in database",
+                    user.getId(), user.getIdentifierName(), user.getEmail())
             );
         }
 
@@ -100,8 +102,8 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
                     String.format("not found user with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            userModel = userRepository.findByUsernameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found user with username=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
+            userModel = userRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
+                    String.format("not found user with identifierName=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
             ));
         }
 
@@ -114,7 +116,7 @@ public class UserService implements UniqueRegisterOperationsInterface<UserModel>
             values.add(userModel);
         } else if (UtilsValidation.isNullOrEmpty(values)) {
             throw new NotFoundException(String.format(
-                    "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                    "not found values in database to combination id=[%s], name=[%s], identifierName=[%s], isDeleted=[%s]",
                     id, name, uniqueKey, isDeleted
             ));
         }

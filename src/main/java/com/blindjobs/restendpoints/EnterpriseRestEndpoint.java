@@ -1,11 +1,10 @@
 package com.blindjobs.restendpoints;
 
-import com.blindjobs.database.models.entities.Enterprise;
+import com.blindjobs.database.models.entities.UniqueUser;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.EnterpriseService;
 import com.blindjobs.utils.UtilsOperation;
-import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,7 +32,7 @@ public class EnterpriseRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Company Created or Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/enterprise", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> upsertCompany(@RequestBody SingleItemPayload<Enterprise> enterprisePayload) throws Exception {
+    public ResponseEntity<OperationData<?>> upsertCompany(@RequestBody SingleItemPayload<UniqueUser> enterprisePayload) throws Exception {
         return new ResponseEntity<>(enterpriseService.upsertRegister(enterprisePayload.getData()), HttpStatus.OK);
     }
 

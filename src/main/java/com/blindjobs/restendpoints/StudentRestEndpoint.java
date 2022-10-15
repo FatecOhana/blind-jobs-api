@@ -3,9 +3,8 @@ package com.blindjobs.restendpoints;
 import com.blindjobs.database.models.entities.UserModel;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
-import com.blindjobs.services.UserService;
+import com.blindjobs.services.StudentService;
 import com.blindjobs.utils.UtilsOperation;
-import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@Tag(name = "User", description = "Endpoint to manipulate and manage users and their data")
-public class UserRestEndpoint {
+@Tag(name = "Student", description = "Endpoint to manipulate and manage students and their data")
+public class StudentRestEndpoint {
 
-    private final UserService userService;
+    private final StudentService userService;
 
-    public UserRestEndpoint(UserService userService) {
+    public StudentRestEndpoint(StudentService userService) {
         this.userService = userService;
     }
 
