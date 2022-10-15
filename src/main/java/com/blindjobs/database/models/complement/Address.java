@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "TB_ADDRESS")
 public class Address extends BaseEntity {
 
     @Schema(description = "cep identifier. With it it is possible to get all the address", example = "05541100")

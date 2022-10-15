@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "TB_JOB")
 public class Job {
 
     // Unique Identifier

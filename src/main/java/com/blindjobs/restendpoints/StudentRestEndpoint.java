@@ -1,6 +1,6 @@
 package com.blindjobs.restendpoints;
 
-import com.blindjobs.database.models.entities.UserModel;
+import com.blindjobs.database.models.entities.Student;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.StudentService;
@@ -32,7 +32,7 @@ public class StudentRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Student Created or Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/student", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<UserModel> userPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<Student> userPayload) throws Exception {
         return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
     }
 
