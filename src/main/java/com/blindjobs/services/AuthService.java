@@ -25,7 +25,8 @@ public class AuthService {
             throw new IllegalArgumentException("Login can't be null or contains null value");
         }
 
-        User value = userRepository.findByEmailOrIdentifierNameAndPasswordAndIsDeleted(data.getCredentialIdentification(),
+        User value = userRepository.findByEmailAndPasswordAndIsDeletedOrIdentifierNameAndPasswordAndIsDeleted(
+                data.getCredentialIdentification(), data.getCredentialValue(), Boolean.FALSE,
                 data.getCredentialIdentification(), data.getCredentialValue(), Boolean.FALSE).orElse(null);
 
         if (UtilsValidation.isNull(value)) {
