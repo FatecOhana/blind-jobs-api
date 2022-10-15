@@ -1,7 +1,7 @@
 package com.blindjobs.services;
 
 import com.blindjobs.database.models.entities.Student;
-import com.blindjobs.database.repositories.entities.UserRepository;
+import com.blindjobs.database.repositories.entities.StudentRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.dto.types.UserType;
@@ -23,10 +23,10 @@ public class StudentService implements UniqueRegisterOperationsInterface<Student
 
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static final UserType USER_TYPE = UserType.STUDENT;
-    private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
 
-    public StudentService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -40,15 +40,15 @@ public class StudentService implements UniqueRegisterOperationsInterface<Student
 
         // Get the user in the database (if exists) and copy its values to the received user (value)
         if (!UtilsValidation.isNull(value.getId())) {    //   if (!UtilsValidation.isNull(existentUser)) {
-            Student existentUser = userRepository.findById(value.getId()).orElse(null);
+            Student existentUser = studentRepository.findById(value.getId()).orElse(null);
             if (!UtilsValidation.isNull(existentUser)) {
                 BeanUtils.copyProperties(value, existentUser);
-                userSaved = userRepository.save(existentUser);
+                userSaved = studentRepository.save(existentUser);
             }
         }
 
         if (UtilsValidation.isNull(userSaved)) {
-            userSaved = userRepository.save(value);
+            userSaved = studentRepository.save(value);
         }
 
 
@@ -63,15 +63,15 @@ public class StudentService implements UniqueRegisterOperationsInterface<Student
             throw new NotFoundException("UserModel id can't be null");
         }
 
-        Student user = userRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
+        Student user = studentRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
         if (UtilsValidation.isNull(user)) {
             throw new NotFoundException(String.format("not found UserModel with id=[%s] and isDeleted=[%s]", value, false));
         }
 
         user.setIsDeleted(Boolean.TRUE);
-        userRepository.save(user);
+        studentRepository.save(user);
 
-        if (userRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
+        if (studentRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
             throw new NotFoundException(String.format(
                     "UserModel: id=[%s], identifierName=[%s], email=[%s] not configured with delet in database",
                     user.getId(), user.getIdentifierName(), user.getEmail())
@@ -98,18 +98,18 @@ public class StudentService implements UniqueRegisterOperationsInterface<Student
 
         Student student = null;
         if (!UtilsValidation.isNull(id)) {
-            student = userRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
+            student = studentRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
                     String.format("not found user with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            student = userRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
+            student = studentRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
                     String.format("not found user with identifierName=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
             ));
         }
 
         List<Student> values = new ArrayList<>();
         if (!UtilsValidation.isNull(name)) {
-            values = userRepository.findByNameAndIsDeleted(name, isDeleted);
+            values = studentRepository.findByNameAndIsDeleted(name, isDeleted);
         }
 
         if (!UtilsValidation.isNull(student)) {
@@ -127,7 +127,7 @@ public class StudentService implements UniqueRegisterOperationsInterface<Student
 
     @Override
     public OperationData<?> findAllRegister() {
-        return new OperationData<>(new HashSet<>(userRepository.findAll()), null);
+        return new OperationData<>(new HashSet<>(studentRepository.findAll()), null);
     }
 
 }

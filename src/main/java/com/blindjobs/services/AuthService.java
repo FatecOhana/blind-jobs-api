@@ -1,7 +1,7 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.repositories.entities.UniqueUserRepository;
 import com.blindjobs.database.repositories.entities.UserRepository;
+import com.blindjobs.database.repositories.entities.StudentRepository;
 import com.blindjobs.dto.Login;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
-    private final UniqueUserRepository uniqueUserRepository;
 
-    public AuthService(UserRepository userRepository, UniqueUserRepository uniqueUserRepository) {
+    public AuthService(StudentRepository studentRepository, UserRepository userRepository) {
+        this.studentRepository = studentRepository;
         this.userRepository = userRepository;
-        this.uniqueUserRepository = uniqueUserRepository;
     }
 
     public OperationData<?> checkCredential(Login data, String module) throws Exception {
@@ -28,10 +28,10 @@ public class AuthService {
         }
 
         Object value = switch (module) {
-            case "user" -> userRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
+            case "user" -> studentRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
                     data.getCredentialValue(), Boolean.FALSE).orElse(null);
             case "enterprise" ->
-                    uniqueUserRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
+                    userRepository.findByEmailAndPasswordAndIsDeleted(data.getCredentialIdentification(),
                             data.getCredentialValue(), Boolean.FALSE).orElse(null);
             default -> null;
         };

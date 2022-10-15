@@ -1,7 +1,7 @@
 package com.blindjobs.services;
 
 import com.blindjobs.database.models.entities.User;
-import com.blindjobs.database.repositories.entities.UniqueUserRepository;
+import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
@@ -21,10 +21,10 @@ import java.util.UUID;
 public class UserService implements UniqueRegisterOperationsInterface<User> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-    private final UniqueUserRepository uniqueUserRepository;
+    private final UserRepository userRepository;
 
-    public UserService(UniqueUserRepository uniqueUserRepository) {
-        this.uniqueUserRepository = uniqueUserRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -38,15 +38,15 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
 
         // Get the uniqueUser in the database (if exists) and copy its values to the received uniqueUser (value)
         if (!UtilsValidation.isNull(value.getId())) {
-            User existentUser = uniqueUserRepository.findById(value.getId()).orElse(null);
+            User existentUser = userRepository.findById(value.getId()).orElse(null);
             if (!UtilsValidation.isNull(existentUser)) {
                 BeanUtils.copyProperties(value, existentUser);
-                user = uniqueUserRepository.save(existentUser);
+                user = userRepository.save(existentUser);
             }
         }
 
         if (UtilsValidation.isNull(user)) {
-            user = uniqueUserRepository.save(value);
+            user = userRepository.save(value);
         }
 
 
@@ -61,15 +61,15 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
             throw new NotFoundException("UniqueUser id can't be null");
         }
 
-        User user = uniqueUserRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
+        User user = userRepository.findByIdAndIsDeletedIs(value, Boolean.FALSE).orElse(null);
         if (UtilsValidation.isNull(user)) {
             throw new NotFoundException(String.format("not found UniqueUser with id=[%s] and isDeleted=[%s]", value, false));
         }
 
         user.setIsDeleted(Boolean.TRUE);
-        uniqueUserRepository.save(user);
+        userRepository.save(user);
 
-        if (uniqueUserRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
+        if (userRepository.findByIdAndIsDeletedIsFalse(user.getId()).isPresent()) {
             throw new NotFoundException(String.format(
                     "UniqueUser: id=[%s], uniqueKey=[%s], email=[%s] not configured with delet in database",
                     user.getId(), user.getIdentifierName(), user.getEmail())
@@ -96,18 +96,18 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
 
         User user = null;
         if (!UtilsValidation.isNull(id)) {
-            user = uniqueUserRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
+            user = userRepository.findByIdAndIsDeletedIs(id, isDeleted).orElseThrow(() -> new NotFoundException(
                     String.format("not found uniqueUser with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            user = uniqueUserRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
+            user = userRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
                     String.format("not found uniqueUser with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
             ));
         }
 
         List<User> values = new ArrayList<>();
         if (!UtilsValidation.isNull(name)) {
-            values = uniqueUserRepository.findByNameAndIsDeleted(name, isDeleted);
+            values = userRepository.findByNameAndIsDeleted(name, isDeleted);
         }
 
         if (!UtilsValidation.isNull(user)) {
@@ -125,7 +125,7 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
 
     @Override
     public OperationData<?> findAllRegister() {
-        return new OperationData<>(new HashSet<>(uniqueUserRepository.findAll()), null);
+        return new OperationData<>(new HashSet<>(userRepository.findAll()), null);
     }
 
 }
