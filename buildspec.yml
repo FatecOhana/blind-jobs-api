@@ -47,11 +47,11 @@ phases:
 
 
       - ls
-      - ./gradlew build
+      # - ./gradlew build
       - ls
-      - cd generated
-      - ls
-      - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+      # - cd generated
+      # - ls
+      # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
 # artifacts:
