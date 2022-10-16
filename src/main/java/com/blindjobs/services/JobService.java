@@ -217,10 +217,11 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
 
-    public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, boolean isDeleted) throws Exception {
+    public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, UserType userType,
+                                                    boolean isDeleted) throws Exception {
         logger.info("Get All Jobs Of UniqueUser...");
 
-        User enterprise = userService.findRegister(id, name, uniqueKey, null, isDeleted).getData()
+        User enterprise = userService.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
                 .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         id, name, uniqueKey, isDeleted)));

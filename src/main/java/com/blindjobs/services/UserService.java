@@ -98,9 +98,13 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
         UserType userType;
         try {
             userType = (UserType) type;
+            if (UtilsValidation.isNull(userType)) {
+                logger.error(String.format("not found matching value to userType=[%s] in UserType", type));
+                throw new NotFoundException("not found value to UserType");
+            }
         } catch (Exception ex) {
             logger.error(String.format("not found matching value to userType=[%s] in UserType", type), ex);
-            throw new NotFoundException("not found value in UserType");
+            throw new NotFoundException("not found value to UserType", ex);
         }
 
         User user = null;
@@ -111,7 +115,8 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
         } else if (!UtilsValidation.isNull(uniqueKey)) {
             user = userRepository.findByIdentifierNameAndUserTypeAndIsDeleted(uniqueKey, userType, isDeleted)
                     .orElseThrow(() -> new NotFoundException(String.format(
-                            "not found uniqueUser with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
+                            "not found uniqueUser with uniqueKey=[%s], userType=[%s] and isDeleted=[%s]", uniqueKey,
+                            userType, isDeleted)
                     ));
         }
 
