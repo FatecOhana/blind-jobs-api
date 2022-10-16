@@ -6,9 +6,6 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --no-include-email)
-      # - REPOSITORY_URI=999999999999.dkr.ecr.ap-southeast-1.amazonaws.com
-      # - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
-      # - IMAGE_URI="${REPOSITORY_URI}:${TAG}"
 
   install:
     runtime-versions:
@@ -17,37 +14,21 @@ phases:
   build:
     commands:
       - java -version
-      # - mvn install
-      ########################################
-      # - echo Build started on `date`
-      ########################################
       # - sudo su
       # - ./gradlew clean build
       # - ./gradlew build
       - echo Building the Docker image...
 
-      #########################################
-      # - docker build --tag "$IMAGE_URI" .
-      # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      ###########################################
-
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-
-      #########################################
-      # - docker push $REPOSITORY_URl:latest
-      # - docker push "$IMAGE_URI"
-  #     - echo Writing image definitions file...
-      # - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_URI" > "images.json"
-      # - cat images.json
-      #########################################
-
+    
       - sudo su
-      - sdk install gradle 7.5.1
+      # - sdk install gradle 7.5.1
+      # - build.gradle
       - ls
-      - ./gradlew build
+      - ./gradlew
       - ls
       - cd build
       - ls
