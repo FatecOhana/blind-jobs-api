@@ -1,0 +1,71 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --no-include-email)
+      # - REPOSITORY_URI=999999999999.dkr.ecr.ap-southeast-1.amazonaws.com
+      # - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
+      # - IMAGE_URI="${REPOSITORY_URI}:${TAG}"
+
+  install:
+    runtime-versions:
+      java: corretto17
+
+  build:
+    commands:
+      - java -version
+      # - mvn package
+      ########################################
+      # - echo Build started on `date`
+      ########################################
+
+      - ./gradlew build
+      - ls
+      - echo Building the Docker image...
+
+      #########################################
+      # - docker build --tag "$IMAGE_URI" .
+      # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      ###########################################
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+
+      #########################################
+      # - docker push $REPOSITORY_URl:latest
+      # - docker push "$IMAGE_URI"
+  #     - echo Writing image definitions file...
+      # - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_URI" > "images.json"
+      # - cat images.json
+      #########################################
+
+
+      - ls
+      - ./gradlew build
+      - ls
+      - cd generated
+      - ls
+      - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+
+#############################################
+# artifacts:
+#   files: images.json
+  #   - '**/*'
+  #   - imagedefinitions.json
+  # base-directory: './build/libs'
+# reports:
+      # test-report-group: #Junit reports
+        # files:
+        #   - 'TEST-boris.maths.MathsApplicationTests.xml'
+        #discard-paths: false #do not remove file paths from test result files
+        # base-directory: './build/test-results/test'
+###############################################
+
+
+
+# comandos que tem o - na frente é os que são executados no console
