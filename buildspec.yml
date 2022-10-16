@@ -17,24 +17,34 @@ phases:
   build:
     commands:
       - java -version
-      - mvn package
+      # - mvn package
+      ########################################
       # - echo Build started on `date`
+      ########################################
+
       - ./gradlew build
       - ls
       - echo Building the Docker image...
+
+      #########################################
       # - docker build --tag "$IMAGE_URI" .
       # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      ###########################################
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
+
+      #########################################
       # - docker push $REPOSITORY_URl:latest
       # - docker push "$IMAGE_URI"
   #     - echo Writing image definitions file...
       # - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_URI" > "images.json"
       # - cat images.json
-      #########################
+      #########################################
+
+
       - ls
       - ./gradlew build
       - ls
@@ -42,7 +52,7 @@ phases:
       - ls
       - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
-
+#############################################
 # artifacts:
 #   files: images.json
   #   - '**/*'
@@ -54,7 +64,7 @@ phases:
         #   - 'TEST-boris.maths.MathsApplicationTests.xml'
         #discard-paths: false #do not remove file paths from test result files
         # base-directory: './build/test-results/test'
-
+###############################################
 
 
 
