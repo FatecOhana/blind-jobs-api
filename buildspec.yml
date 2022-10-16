@@ -28,7 +28,7 @@ phases:
       # - sdk install gradle 7.5.1
       # - build.gradle
       - ls
-      - ./gradlew
+      - ./gradlew clean
       - ls
       - cd build
       - ls
