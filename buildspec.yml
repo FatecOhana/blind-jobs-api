@@ -52,7 +52,7 @@ phases:
       - ls
       - cd libs
       - dir
-      # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+      # # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
 # artifacts:
