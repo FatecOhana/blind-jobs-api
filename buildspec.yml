@@ -47,7 +47,7 @@ phases:
 
 
       - ls
-      # - ./gradlew build
+      - ./gradle build
       - ls
       # - cd generated
       # - ls
