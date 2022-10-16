@@ -53,10 +53,9 @@ phases:
 artifacts:
   files: 
     # - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
-    - '*-all.jar'
+    - '*-SNAPSHOT.jar'
   #   - imagedefinitions.json
   base-directory: 'build/libs'
-    - ls
 # reports:
       # test-report-group: #Junit reports
         # files:
