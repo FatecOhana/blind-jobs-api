@@ -39,7 +39,7 @@ artifacts:
   #   - imagedefinitions.json
   # base-directory: './build/libs'
 reports:
-      test-report-group: #Junit reports
+      # test-report-group: #Junit reports
         # files:
         #   - 'TEST-boris.maths.MathsApplicationTests.xml'
         #discard-paths: false #do not remove file paths from test result files
