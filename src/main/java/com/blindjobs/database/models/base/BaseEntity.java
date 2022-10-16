@@ -20,11 +20,11 @@ public abstract class BaseEntity {
     @Column(unique = true, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
-    @Schema(description = "name of entity", example = "Some name")
+    @Schema(description = "name of entity", example = "Generic name of Entity")
     @Column(nullable = false)
     private String name;
 
-    @Schema(description = "unique name of entity", example = "ONLY_MY")
+    @Schema(description = "unique name of entity", example = "Entity-UnIqUe_USERNAME")
     @Column(nullable = false, unique = true)
     private String identifierName;
 

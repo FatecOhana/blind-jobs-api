@@ -3,9 +3,11 @@ package com.blindjobs.restendpoints;
 import com.blindjobs.database.models.entities.User;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
+import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.UserService;
 import com.blindjobs.utils.UtilsOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -61,8 +63,10 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All Users Registers", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user/all", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getAllUser() {
-        return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
+    public ResponseEntity<OperationData<?>> getAllUser(
+            @Parameter(name = "userType", description = "UserType value of users that will be searched", schema = @Schema(
+                    implementation = UserType.class)) @RequestParam UserType userType) {
+        return new ResponseEntity<>(userService.findAllRegisterV2(userType), HttpStatus.OK);
     }
 
 }
