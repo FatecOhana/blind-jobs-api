@@ -82,7 +82,7 @@ public class Job {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private User enterprise;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Address address;
 
 //    private Set<Benefits> benefits;
