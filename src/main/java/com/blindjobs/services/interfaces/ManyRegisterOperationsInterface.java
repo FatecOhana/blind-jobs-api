@@ -20,6 +20,7 @@ public interface ManyRegisterOperationsInterface<T> extends UniqueRegisterOperat
     /**
      * Find Matches Register in Database
      */
-    OperationData<?> findManyMatchRegisters(Set<UUID> id, Set<String> name, Set<String> uniqueKey, Boolean isDeleted) throws Exception;
+    OperationData<?> findManyMatchRegisters(Set<UUID> id, Set<String> name, Set<String> uniqueKey, Object type,
+                                            Boolean isDeleted) throws Exception;
 
 }

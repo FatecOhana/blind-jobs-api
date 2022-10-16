@@ -29,7 +29,7 @@ public interface UniqueRegisterOperationsInterface<T> {
     /**
      * Find Matches Register in Database
      */
-    OperationData<?> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception;
+    OperationData<?> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception;
 
     /**
      * Find all Register in Database

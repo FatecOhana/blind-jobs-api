@@ -89,7 +89,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
     @Override
-    public OperationData<?> findManyMatchRegisters(Set<UUID> id, Set<String> name, Set<String> uniqueKey, Boolean isDeleted) throws Exception {
+    public OperationData<?> findManyMatchRegisters(Set<UUID> id, Set<String> name, Set<String> uniqueKey, Object type, Boolean isDeleted) throws Exception {
         throw new NotImplementedException("method \"findManyMatchRegisters\" in JobService not Implemented. Check findRegister");
     }
 
@@ -156,7 +156,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
     @Override
-    public OperationData<?> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception {
+    public OperationData<?> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
 
         Job job = null;
@@ -197,7 +197,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, boolean isDeleted) throws Exception {
         logger.info("Get All Jobs Of UniqueUser...");
 
-        User enterprise = userService.findRegister(id, name, uniqueKey, isDeleted).getData()
+        User enterprise = userService.findRegister(id, name, uniqueKey, null, isDeleted).getData()
                 .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         id, name, uniqueKey, isDeleted)));
