@@ -4,6 +4,7 @@ import com.blindjobs.database.models.entities.User;
 import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
+import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
@@ -123,9 +124,21 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
         return new OperationData<>(new HashSet<>(values), null);
     }
 
+    /**
+     * This method return all register in user table. It was deprecated because of bringing a lot of data at once,
+     * which can crash the api
+     *
+     * @return {@link OperationData}
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public OperationData<?> findAllRegister() {
         return new OperationData<>(new HashSet<>(userRepository.findAll()), null);
+    }
+
+    public OperationData<?> findAllRegisterV2(UserType userType) {
+        return new OperationData<>(new HashSet<>(userRepository.findAllByUserType(userType)), null);
     }
 
 }

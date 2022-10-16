@@ -26,7 +26,8 @@ public class AuthRestEndpoint {
         this.authService = authService;
     }
 
-    @Operation(summary = "Check credentials")
+    @Operation(summary = "Check credentials",
+            description = "Pass in \"credentialIdentification\" the email or identifierName and in \"credentialValue\" the password")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User checked", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/login", produces = "application/json", consumes = "application/json")

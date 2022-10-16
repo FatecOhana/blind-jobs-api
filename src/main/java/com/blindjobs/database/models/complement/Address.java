@@ -1,20 +1,12 @@
 package com.blindjobs.database.models.complement;
 
-import com.blindjobs.database.models.base.BaseEntity;
-import com.blindjobs.database.models.entities.Job;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -22,7 +14,26 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity(name = "TB_ADDRESS")
-public class Address extends BaseEntity {
+public class Address {
+
+    // Default class values
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true, nullable = false, columnDefinition = "uuid")
+    private UUID id;
+
+    @Schema(description = "complete address", example = "Avenida Paulista, 123 - São Paulo-SP")
+    @Column(nullable = false)
+    private String name;
+
+    @Schema(description = "unique identifier", example = "PAULISTA_123_SP")
+    @Column(nullable = false, unique = true)
+    private String identifierName;
+
+    @Schema(description = "defines if the register is deleted. this tag allows you to retrieve possible excluded cases",
+            defaultValue = "false")
+    private Boolean isDeleted = Boolean.FALSE;
+
 
     @Schema(description = "cep identifier. With it it is possible to get all the address", example = "05541100")
     @Column(nullable = false)
@@ -31,9 +42,4 @@ public class Address extends BaseEntity {
     @Schema(description = "optional address complement", example = "Bl 1, Apto 1512")
     private String complement;
 
-    public Address(UUID id, String name, String identifierName, Boolean isDeleted, String cep, String complement) {
-        super(id, name, identifierName, isDeleted);
-        this.cep = cep;
-        this.complement = complement;
-    }
 }
