@@ -51,7 +51,8 @@ phases:
       - cd build
       - ls
       - cd libs
-      - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+      - dir
+      # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
 # artifacts:
