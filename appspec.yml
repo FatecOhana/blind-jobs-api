@@ -1,9 +1,23 @@
 version: 0.0
-Resources:
-  - TargetService:
-      Type: AWS::ECS::Service
-      Properties:
-        # TaskDefinition: <TASK_DEFINITION>
-        # LoadBalancerInfo:
-          ContainerName: "container"
-          ContainerPort: 8080
+# Resources:
+#   - TargetService:
+#       Type: AWS::ECS::Service
+#       Properties:
+#         # TaskDefinition: <TASK_DEFINITION>
+#         # LoadBalancerInfo:
+#           ContainerName: "container"
+#           ContainerPort: 8080
+
+files:
+  - source: /
+    destination: /var/www/html/
+hooks:
+  BeforeInstall:
+  - location: stop_server
+    timeout: 30
+    runas: root
+
+build:
+  commands:
+    - sudo su
+    - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
