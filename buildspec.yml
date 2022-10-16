@@ -17,14 +17,13 @@ phases:
   build:
     commands:
       - java -version
-      # - mvn package
+      # - mvn install
       ########################################
       # - echo Build started on `date`
       ########################################
       # - sudo su
       # - ./gradlew clean build
       # - ./gradlew build
-      - ls
       - echo Building the Docker image...
 
       #########################################
@@ -45,17 +44,18 @@ phases:
       # - cat images.json
       #########################################
 
-
+      - sudo su
       - ls
-      - ./gradle build
+      - ./gradlew build -blind-jobs
       - ls
       # - cd generated
       # - ls
       # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
-# artifacts:
-#   files: images.json
+artifacts:
+  files: 
+    - target/blind-jobs-0.0.1-SNAPSHOT.jar
   #   - '**/*'
   #   - imagedefinitions.json
   # base-directory: './build/libs'
