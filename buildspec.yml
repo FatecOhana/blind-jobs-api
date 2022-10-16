@@ -17,7 +17,7 @@ phases:
 
 
 
-      - ./gradlew build --scan
+      - ./gradlew build
 
 
 
