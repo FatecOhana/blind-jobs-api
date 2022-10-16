@@ -5,10 +5,10 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URl=999999999999.dkr.ecr.ap-southeast-1.amazonaws.com
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-  #     - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - $(aws ecr get-login --no-include-email)
+      # - REPOSITORY_URI=999999999999.dkr.ecr.ap-southeast-1.amazonaws.com
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 1-7)"
+      - IMAGE_URI="${REPOSITORY_URI}:${TAG}"
 
   install:
     runtime-versions:
@@ -16,11 +16,13 @@ phases:
 
   build:
     commands:
+      - java -version
+      - mvn package
       - echo Build started on `date`
-      # - ./gradlew clean build 
+      - ./gradlew build
       - ls
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URl:latest .
+      - docker build --tag "$IMAGE_URI" .
       # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
 
   post_build:
@@ -28,15 +30,15 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URl:latest
-  #     - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push "$IMAGE_URI"
   #     - echo Writing image definitions file...
-  #     - printf '[{"name":"cicd-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_URI" > "images.json"
   #     - cat imagedefinitions.json
 
 
-# artifacts:
-#   files:
-#     - '**/*'
+artifacts:
+  files: images.json
+  #   - '**/*'
   #   - imagedefinitions.json
   # base-directory: './build/libs'
 # reports:
