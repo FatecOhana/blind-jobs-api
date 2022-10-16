@@ -46,7 +46,7 @@ phases:
 
       - sudo su
       - ls
-      - gradlew build
+      - ./gradlew build
       - ls
       - cd build
       - ls
