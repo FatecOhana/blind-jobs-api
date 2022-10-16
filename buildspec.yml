@@ -21,7 +21,8 @@ phases:
       ########################################
       # - echo Build started on `date`
       ########################################
-      - sudo su
+      # - sudo su
+      # - ./gradlew clean build
       # - ./gradlew build
       - ls
       - echo Building the Docker image...
