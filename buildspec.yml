@@ -14,20 +14,20 @@ phases:
   build:
     commands:
       # - java -version
+      - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 
-
-      - ./gradlew build
+      # - ./gradlew build
 
 
 
       # - ./gradlew build
       - echo Building the Docker image...
 
-  post_build:
-    finally:
-      - rm -f /root/.gradle/caches/modules-2/modules-2.lock
-      - rm -f /root/.gradle/caches/*/plugin-resolution/
+  # post_build:
+    # finally:
+    #   - rm -f /root/.gradle/caches/modules-2/modules-2.lock
+    #   - rm -f /root/.gradle/caches/*/plugin-resolution/
     # commands:
     #   - echo Build completed on `date`
     #   - echo Pushing the Docker images...
