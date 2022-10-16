@@ -14,8 +14,13 @@ phases:
   build:
     commands:
       - java -version
-      # - sudo su
-      # - ./gradlew clean build
+
+
+
+      - ./gradlew build --scan
+
+
+
       # - ./gradlew build
       - echo Building the Docker image...
 
@@ -23,27 +28,31 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-    
-      - sudo su
-      # - sdk install gradle 7.5.1
-      # - build.gradle
+
+
+
+
+
       - ls
-      - ./gradlew clean
-      - ls
-      - cd build
-      - ls
-      - cd libs
-      - ls
+      # # - ./gradlew clean
+      # - ls
+      # - cd build
+      # - ls
+      # - cd libs
+      # - ls
       - echo Build completed successfully
+
+
+
       # # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
-# artifacts:
-#   files: 
-#     - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
-  #   - '**/*'
+artifacts:
+  files: 
+    # - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
+    - '**/*'
   #   - imagedefinitions.json
-  # base-directory: './build/libs'
+  base-directory: 'build/libs'
 # reports:
       # test-report-group: #Junit reports
         # files:
