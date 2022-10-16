@@ -16,17 +16,17 @@ phases:
 
   build:
     commands:
-      # - echo Build started on `date`
-      # - ./gradlew clean build 
+      - echo Build started on `date`
+      - ./gradlew clean build 
       - ls
-      # - echo Building the Docker image...
+      - echo Building the Docker image...
       # - docker build -t $REPOSITORY_URI:latest .
       # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
 
-  # post_build:
-  #   commands:
-  #     - echo Build completed on `date`
-  #     - echo Pushing the Docker images...
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
   #     - docker push $REPOSITORY_URI:latest
   #     - docker push $REPOSITORY_URI:$IMAGE_TAG
   #     - echo Writing image definitions file...
