@@ -4,9 +4,11 @@ import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.Payload;
 import com.blindjobs.dto.SingleItemPayload;
+import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.JobService;
 import com.blindjobs.utils.UtilsOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -102,9 +104,13 @@ public class JobRestEndpoint {
     public ResponseEntity<OperationData<?>> getAllJobOfEnterprise(@RequestParam(required = false) String id,
                                                                   @RequestParam(required = false) String uniqueName,
                                                                   @RequestParam(required = false) String name,
+                                                                  @Parameter(name = "userType", required = true,
+                                                                          schema = @Schema(implementation = UserType.class),
+                                                                          description = "UserType value of users that will be searched"
+                                                                  ) @RequestParam(defaultValue = "EMPRESA") UserType userType,
                                                                   @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(jobService.findAllJobsOfEnterprise(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(jobService.findAllJobsOfEnterprise(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
 
 
