@@ -91,7 +91,7 @@ public class AddressService implements UniqueRegisterOperationsInterface<Address
     }
 
     @Override
-    public OperationData<?> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
+    public OperationData<Address> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
 
         Address addressModel = null;

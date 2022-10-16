@@ -1,10 +1,12 @@
 package com.blindjobs.services;
 
-import com.blindjobs.database.models.entities.User;
+import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.database.models.entities.Job;
+import com.blindjobs.database.models.entities.User;
 import com.blindjobs.database.repositories.entities.JobRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
+import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.interfaces.ManyRegisterOperationsInterface;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
@@ -20,10 +22,12 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
 
     private static final Logger logger = LoggerFactory.getLogger(JobService.class);
     private final JobRepository jobRepository;
+    private final AddressService addressService;
     private final UserService userService;
 
-    public JobService(JobRepository jobRepository, UserService userService) {
+    public JobService(JobRepository jobRepository, AddressService addressService, UserService userService) {
         this.jobRepository = jobRepository;
+        this.addressService = addressService;
         this.userService = userService;
     }
 
@@ -112,11 +116,30 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
         }
 
         if (UtilsValidation.isNull(jobSaved)) {
+            checkAddressExistent(value);
             jobSaved = jobRepository.save(value);
         }
 
         logger.info("Finished Upsert Register...");
         return new OperationData<>(jobSaved);
+    }
+
+    /**
+     * Check in database if the {@link Address} in {@link Job} exists.
+     *
+     * @param job contains the {@link Address}. Your {@link Address} can be updated if exists in database, to sync your
+     *            data and ID
+     */
+    private void checkAddressExistent(Job job) {
+        if (UtilsValidation.isNull(job) || UtilsValidation.isNull(job.getAddress())) return;
+
+        try {
+            Address address = job.getAddress();
+            addressService.findRegister(address.getId(), null, address.getIdentifierName(), null,
+                    address.getIsDeleted()).getData().stream().findFirst().ifPresent(job::setAddress);
+        } catch (Exception ex) {
+            logger.info("Not found address in register job");
+        }
     }
 
     @Override

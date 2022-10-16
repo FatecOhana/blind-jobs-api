@@ -82,7 +82,8 @@ public class Job {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private User enterprise;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false, targetEntity = Address.class)
+    @JoinColumn(name = "ADDRESS_ID", nullable = false, referencedColumnName = "ID")
     private Address address;
 
 //    private Set<Benefits> benefits;

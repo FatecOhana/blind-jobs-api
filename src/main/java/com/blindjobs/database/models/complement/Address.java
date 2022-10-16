@@ -19,7 +19,7 @@ public class Address {
     // Default class values
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(unique = true, nullable = false, columnDefinition = "uuid")
+    @Column(name = "ID", unique = true, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     @Schema(description = "complete address", example = "Avenida Paulista, 123 - São Paulo-SP")
