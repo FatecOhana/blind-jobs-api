@@ -13,7 +13,7 @@ phases:
 
   build:
     commands:
-      - java -version
+      # - java -version
 
 
 
@@ -25,22 +25,25 @@ phases:
       - echo Building the Docker image...
 
   post_build:
-    commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
+    finally:
+      - rm -f /root/.gradle/caches/modules-2/modules-2.lock
+      - rm -f /root/.gradle/caches/*/plugin-resolution/
+    # commands:
+    #   - echo Build completed on `date`
+    #   - echo Pushing the Docker images...
 
 
 
 
 
-      - ls
-      # # - ./gradlew clean
-      # - ls
-      # - cd build
-      # - ls
-      # - cd libs
-      # - ls
-      - echo Build completed successfully
+    #   - ls
+    #   # # - ./gradlew clean
+    #   # - ls
+    #   # - cd build
+    #   # - ls
+    #   # - cd libs
+    #   # - ls
+    #   - echo Build completed successfully
 
 
 
@@ -50,9 +53,10 @@ phases:
 artifacts:
   files: 
     # - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
-    - '**/*'
+    - '*-all.jar'
   #   - imagedefinitions.json
   base-directory: 'build/libs'
+    - ls
 # reports:
       # test-report-group: #Junit reports
         # files:
