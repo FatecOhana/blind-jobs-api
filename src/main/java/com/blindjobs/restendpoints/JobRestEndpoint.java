@@ -72,7 +72,7 @@ public class JobRestEndpoint {
                                                    @RequestParam(required = false) String name,
                                                    @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(jobService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(jobService.findRegister(uuid, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }
 
     @Operation(summary = "Get database job values using many matches", description = "You must enter one or many values in filter")
@@ -84,7 +84,7 @@ public class JobRestEndpoint {
                                                                 @RequestParam(required = false) Set<String> name,
                                                                 @RequestParam(required = false) boolean isDeleted) throws Exception {
         Set<UUID> uuids = UtilsOperation.convertStringsToUUIDs(id);
-        return new ResponseEntity<>(jobService.findManyMatchRegisters(uuids, name, uniqueName, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(jobService.findManyMatchRegisters(uuids, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all job values in database", description = "This method is only allowed for debug")

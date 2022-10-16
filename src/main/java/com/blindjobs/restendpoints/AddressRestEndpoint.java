@@ -54,7 +54,7 @@ public class AddressRestEndpoint {
                                                     @RequestParam(required = false) String name,
                                                     @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(addressService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(addressService.findRegister(uuid, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }
 
     // TODO ALLOW ONLY FOR MASTER ADMIN

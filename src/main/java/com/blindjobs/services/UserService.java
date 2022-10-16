@@ -92,8 +92,16 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
     }
 
     @Override
-    public OperationData<User> findRegister(UUID id, String name, String uniqueKey, Boolean isDeleted) throws Exception {
+    public OperationData<User> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
+
+        UserType userType;
+        try {
+            userType = (UserType) type;
+        } catch (Exception ex) {
+            logger.error(String.format("not found matching value to userType=[%s] in UserType", type), ex);
+            throw new NotFoundException("not found value in UserType");
+        }
 
         User user = null;
         if (!UtilsValidation.isNull(id)) {
@@ -101,22 +109,23 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
                     String.format("not found uniqueUser with id=[%s] and isDeleted=[%s]", id, isDeleted)
             ));
         } else if (!UtilsValidation.isNull(uniqueKey)) {
-            user = userRepository.findByIdentifierNameAndIsDeleted(uniqueKey, isDeleted).orElseThrow(() -> new NotFoundException(
-                    String.format("not found uniqueUser with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
-            ));
+            user = userRepository.findByIdentifierNameAndUserTypeAndIsDeleted(uniqueKey, userType, isDeleted)
+                    .orElseThrow(() -> new NotFoundException(String.format(
+                            "not found uniqueUser with uniqueKey=[%s] and isDeleted=[%s]", uniqueKey, isDeleted)
+                    ));
         }
 
         List<User> values = new ArrayList<>();
         if (!UtilsValidation.isNull(name)) {
-            values = userRepository.findByNameAndIsDeleted(name, isDeleted);
+            values = userRepository.findByNameAndUserTypeAndIsDeleted(name, userType, isDeleted);
         }
 
         if (!UtilsValidation.isNull(user)) {
             values.add(user);
         } else if (UtilsValidation.isNullOrEmpty(values)) {
             throw new NotFoundException(String.format(
-                    "not found values in database to combination id=[%s], name=[%s], uniqueKey=[%s], isDeleted=[%s]",
-                    id, name, uniqueKey, isDeleted
+                    "not found values in database to combination id=[%s], name=[%s], uniqueKey=[%s], isDeleted=[%s], userType=[%s]",
+                    id, name, uniqueKey, isDeleted, userType
             ));
         }
 

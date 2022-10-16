@@ -99,9 +99,12 @@ public class UserRestEndpoint {
     public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
                                                     @RequestParam(required = false) String uniqueName,
                                                     @RequestParam(required = false) String name,
+                                                    @Parameter(schema = @Schema(implementation = UserType.class),
+                                                            description = "UserType value of users that will be searched",
+                                                            name = "userType") @RequestParam UserType userType,
                                                     @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(userService.findRegister(uuid, name, uniqueName, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findRegister(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
 
     // TODO ALLOW ONLY FOR MASTER ADMIN

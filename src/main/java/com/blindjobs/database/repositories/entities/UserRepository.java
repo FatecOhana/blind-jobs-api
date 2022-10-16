@@ -21,9 +21,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByIdAndIsDeletedIs(UUID id, Boolean isDeleted);
 
-    Optional<User> findByIdentifierNameAndIsDeleted(String identifierName, Boolean isDeleted);
+    Optional<User> findByIdentifierNameAndUserTypeAndIsDeleted(String identifierName, UserType type, Boolean isDeleted);
 
-    List<User> findByNameAndIsDeleted(String name, Boolean isDeleted);
+    List<User> findByNameAndUserTypeAndIsDeleted(String name, UserType type, Boolean isDeleted);
 
     Optional<User> findByEmailAndPasswordAndIsDeletedOrIdentifierNameAndPasswordAndIsDeleted(
             String email, String password, Boolean isDeleted, String identifierName, String otherPassword, Boolean otherIsDeleted);
