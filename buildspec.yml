@@ -38,7 +38,7 @@ artifacts:
     - '**/*'
   #   - imagedefinitions.json
   # base-directory: './build/libs'
-reports:
+# reports:
       # test-report-group: #Junit reports
         # files:
         #   - 'TEST-boris.maths.MathsApplicationTests.xml'
