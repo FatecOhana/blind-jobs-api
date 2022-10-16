@@ -73,9 +73,16 @@ public class User {
     @Column(nullable = false)
     private String documentValue;
 
-
     // User Address Data
 //    private Address address;
+
+    // User Skills and Qualifications
+//    private List<Skills> skills;
+//    private List<SchoolQualification> schoolQualification;
+
+    // User Professional History (Jobs, Ongs, etc)
+//    private List<WorkExperience> workExperiences;
+
 
     @Override
     public boolean equals(Object obj) {
