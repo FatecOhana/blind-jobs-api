@@ -111,7 +111,7 @@ public class JobRestEndpoint {
                                                                   ) @RequestParam(defaultValue = "EMPRESA") UserType userType,
                                                                   @RequestParam(required = false) boolean isDeleted) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(jobService.findAllJobsOfEnterprise(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
+        return new ResponseEntity<>(jobService.findAllJobsOfUser(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
 
     @Operation(summary = "Candidate User in Job",
@@ -122,6 +122,22 @@ public class JobRestEndpoint {
     public ResponseEntity<OperationData<?>> candidateInJob(@RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload)
             throws Exception {
         return new ResponseEntity<>(jobService.candidateUserInJob(candidaturePayload.getData()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all User candidatures")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User candidatures", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
+    @GetMapping(value = "api/v1/job/candidate/user", produces = "application/json")
+    public ResponseEntity<OperationData<?>> getAllUserCandidatures(@RequestParam(required = false) String id,
+                                                                   @RequestParam(required = false) String uniqueName,
+                                                                   @RequestParam(required = false) String name,
+                                                                   @Parameter(name = "userType", required = true,
+                                                                           schema = @Schema(implementation = UserType.class),
+                                                                           description = "UserType value of users that will be searched"
+                                                                   ) @RequestParam(defaultValue = "ESTUDANTE") UserType userType,
+                                                                   @RequestParam(required = false) boolean isDeleted) throws Exception {
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
+        return new ResponseEntity<>(jobService.findAllJobsOfUser(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
 
 }

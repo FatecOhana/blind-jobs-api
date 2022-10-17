@@ -1,6 +1,7 @@
 package com.blindjobs.database.repositories.entities;
 
 import com.blindjobs.database.models.entities.Job;
+import com.blindjobs.database.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
     Optional<Job> findByIdAndIsDeletedIsFalse(UUID id);
 
     Set<Job> findByEnterprise_IdAndIsDeletedIs(UUID id, Boolean isDeleted);
+    Set<Job> findByCandidatesToJobContainsAndIsDeleted(User canidate, Boolean isDeleted);
 
     List<Job> findAllByIsDeletedIs(Boolean isDeleted);
 

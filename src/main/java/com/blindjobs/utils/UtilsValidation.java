@@ -8,10 +8,6 @@ public class UtilsValidation {
         return v == null;
     }
 
-//    public static <T> boolean isNullOrEmpty(Set<T> v) {
-//        return isNull(v) || v.isEmpty();
-//    }
-
     public static <T> boolean isNullOrEmpty(Collection<T> v) {
         return isNull(v) || v.isEmpty();
     }
@@ -22,6 +18,10 @@ public class UtilsValidation {
 
     public static Object ifNull(Object valueNullable, Object valueIfNull) {
         return isNull(valueNullable) ? valueIfNull : valueNullable;
+    }
+
+    public static <T> Collection<T> ifNullOrEmpty(Collection<T> valueNullable, Collection<T> valueIfNull) {
+        return isNullOrEmpty(valueNullable) ? valueIfNull : valueNullable;
     }
 
 }

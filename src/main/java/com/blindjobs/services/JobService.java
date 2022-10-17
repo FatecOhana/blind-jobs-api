@@ -218,16 +218,23 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
 
-    public OperationData<?> findAllJobsOfEnterprise(UUID id, String name, String uniqueKey, UserType userType,
-                                                    boolean isDeleted) throws Exception {
-        logger.info("Get All Jobs Of UniqueUser...");
+    public OperationData<Job> findAllJobsOfUser(UUID id, String name, String uniqueKey, UserType userType, boolean isDeleted)
+            throws Exception {
+        logger.info("Get All Jobs for User...");
 
-        User enterprise = userService.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
+        User user = userService.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
                 .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         id, name, uniqueKey, isDeleted)));
 
-        Set<Job> values = jobRepository.findByEnterprise_IdAndIsDeletedIs(enterprise.getId(), Boolean.FALSE);
+        Set<Job> values = null;
+        switch (userType) {
+            case STUDENT -> {
+                values = jobRepository.findByCandidatesToJobContainsAndIsDeleted(user, Boolean.FALSE);
+                UtilsValidation.ifNullOrEmpty(values, new HashSet<>()).forEach(v -> v.setCandidatesToJob(null));
+            }
+            case ENTERPRISE -> values = jobRepository.findByEnterprise_IdAndIsDeletedIs(user.getId(), Boolean.FALSE);
+        }
 
         if (UtilsValidation.isNullOrEmpty(values)) {
             throw new NotFoundException(String.format(
@@ -236,7 +243,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
             ));
         }
 
-        logger.info("Finished Get All Jobs Of UniqueUser...");
+        logger.info("Finished Get All Jobs for User...");
         return new OperationData<>(values, null);
     }
 
