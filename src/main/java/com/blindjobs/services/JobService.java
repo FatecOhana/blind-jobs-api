@@ -4,6 +4,7 @@ import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.database.models.entities.User;
 import com.blindjobs.database.repositories.entities.JobRepository;
+import com.blindjobs.dto.CandidaturePayload;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.dto.types.UserType;
@@ -179,7 +180,7 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
     @Override
-    public OperationData<?> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
+    public OperationData<Job> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
         logger.info("Get Register...");
 
         Job job = null;
@@ -238,4 +239,39 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
         logger.info("Finished Get All Jobs Of UniqueUser...");
         return new OperationData<>(values, null);
     }
+
+    public OperationData<?> candidateUserInJob(CandidaturePayload value) throws Exception {
+        logger.info("Candidate User in Job...");
+
+        if (UtilsValidation.isNull(value) || UtilsValidation.isNull(value.getJob()) || UtilsValidation.isNull(value.getUser())) {
+            logger.error(String.format(
+                    "the candidature payload values can't be null. candidaturePayload=[%s], job=[%s], user=[%s]",
+                    value, UtilsValidation.isNull(value) ? null : value.getJob(),
+                    UtilsValidation.isNull(value) ? null : value.getUser()
+            ));
+            throw new NotFoundException(String.format("not found values in candidaturePayload=[%s]", value));
+        }
+
+        User userDatabase = userService.findRegister(value.getUser().getId(), value.getUser().getName(),
+                        value.getUser().getIdentifierName(), UserType.STUDENT, Boolean.FALSE)
+                .getData().stream()
+                .findFirst().orElseThrow(() -> new NotFoundException(String.format("not found values in database to " +
+                                "combination id=[%s], name=[%s], username=[%s], userType=[%s] isDeleted=[%s]",
+                        value.getUser().getId(), value.getUser().getName(), value.getUser().getIdentifierName(),
+                        UserType.STUDENT, value.getUser().getIsDeleted())));
+
+        Job job = value.getJob();
+
+        Job jobDatabase = this.findRegister(job.getId(), job.getTitle(), job.getIdentifierName(), null, Boolean.FALSE)
+                .getData().stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
+                        "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                        job.getId(), job.getTitle(), job.getIdentifierName(), job.getIsDeleted())));
+
+        jobDatabase.addCandidate(userDatabase);
+        jobRepository.save(jobDatabase);
+
+        logger.info("Finished Candidated User in Job...");
+        return new OperationData<>(jobDatabase);
+    }
+
 }

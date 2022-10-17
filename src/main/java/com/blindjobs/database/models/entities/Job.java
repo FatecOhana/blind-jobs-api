@@ -4,6 +4,7 @@ import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
+import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -86,12 +90,12 @@ public class Job {
     @JoinColumn(name = "ADDRESS_ID", nullable = false, referencedColumnName = "ID")
     private Address address;
 
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+    private Set<User> candidatesToJob = new HashSet<>();
+
 //    private Set<Benefits> benefits;
 
 //    private Set<Skills> requiredSkills;
-
-//    private Set<UserModel> userApplications;
-//    private Enterprise userApplications;
 
     @Override
     public boolean equals(Object obj) {
@@ -101,6 +105,19 @@ public class Job {
             return false;
         Job that = (Job) obj;
         return id.equals(that.id);
+    }
+
+    public void addCandidate(User user) {
+        if (UtilsValidation.isNull(user)) return;
+
+        Set<User> candidatesSet = this.getCandidatesToJob();
+        if (!UtilsValidation.isNullOrEmpty(candidatesSet)) {
+            candidatesSet.add(user);
+        } else {
+            candidatesSet = new HashSet<>(List.of(user));
+        }
+
+        this.setCandidatesToJob(candidatesSet);
     }
 
     @Override

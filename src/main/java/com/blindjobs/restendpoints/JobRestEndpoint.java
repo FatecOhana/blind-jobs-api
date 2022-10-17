@@ -1,6 +1,7 @@
 package com.blindjobs.restendpoints;
 
 import com.blindjobs.database.models.entities.Job;
+import com.blindjobs.dto.CandidaturePayload;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.Payload;
 import com.blindjobs.dto.SingleItemPayload;
@@ -113,5 +114,14 @@ public class JobRestEndpoint {
         return new ResponseEntity<>(jobService.findAllJobsOfEnterprise(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
 
+    @Operation(summary = "Candidate User in Job",
+            description = "Is necessary pass the User and Job ID")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User candidate in Job", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
+    @PostMapping(value = "api/v1/job/candidate", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<OperationData<?>> candidateInJob(@RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload)
+            throws Exception {
+        return new ResponseEntity<>(jobService.candidateUserInJob(candidaturePayload.getData()), HttpStatus.OK);
+    }
 
 }
