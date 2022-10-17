@@ -6,9 +6,6 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --no-include-email)
-      # - REPOSITORY_URI=999999999999.dkr.ecr.ap-southeast-1.amazonaws.com
-      # - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
-      # - IMAGE_URI="${REPOSITORY_URI}:${TAG}"
 
   install:
     runtime-versions:
@@ -16,51 +13,49 @@ phases:
 
   build:
     commands:
-      - java -version
-      # - mvn install
-      ########################################
-      # - echo Build started on `date`
-      ########################################
-      # - sudo su
-      # - ./gradlew clean build
+      # - java -version
+      - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+
+
+      # - ./gradlew build
+
+
+
       # - ./gradlew build
       - echo Building the Docker image...
 
-      #########################################
-      # - docker build --tag "$IMAGE_URI" .
-      # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      ###########################################
+  # post_build:
+    # finally:
+    #   - rm -f /root/.gradle/caches/modules-2/modules-2.lock
+    #   - rm -f /root/.gradle/caches/*/plugin-resolution/
+    # commands:
+    #   - echo Build completed on `date`
+    #   - echo Pushing the Docker images...
 
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
 
-      #########################################
-      # - docker push $REPOSITORY_URl:latest
-      # - docker push "$IMAGE_URI"
-  #     - echo Writing image definitions file...
-      # - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_URI" > "images.json"
-      # - cat images.json
-      #########################################
 
-      - sudo su
-      - ls
-      - ./gradlew build
-      - ls
-      - cd build
-      - ls
-      - cd libs
-      - dir
-      # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
+
+
+    #   - ls
+    #   # # - ./gradlew clean
+    #   # - ls
+    #   # - cd build
+    #   # - ls
+    #   # - cd libs
+    #   # - ls
+    #   - echo Build completed successfully
+
+
+
+      # # - java -jar blind-jobs-0.0.1-SNAPSHOT.jar
 
 #############################################
 # artifacts:
 #   files: 
-#     - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
-  #   - '**/*'
-  #   - imagedefinitions.json
-  # base-directory: './build/libs'
+#     # - build/libs/blind-jobs-0.0.1-SNAPSHOT.jar
+#     - '*-SNAPSHOT.jar'
+#   #   - imagedefinitions.json
+#   base-directory: 'build/libs'
 # reports:
       # test-report-group: #Junit reports
         # files:
