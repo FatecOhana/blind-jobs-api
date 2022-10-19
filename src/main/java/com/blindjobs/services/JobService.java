@@ -217,36 +217,6 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
         return new OperationData<>(new HashSet<>(jobRepository.findAll()), null);
     }
 
-
-    public OperationData<Job> findAllJobsOfUser(UUID id, String name, String uniqueKey, UserType userType, boolean isDeleted)
-            throws Exception {
-        logger.info("Get All Jobs for User...");
-
-        User user = userService.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
-                .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
-                        "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
-                        id, name, uniqueKey, isDeleted)));
-
-        Set<Job> values = null;
-        switch (userType) {
-            case STUDENT -> {
-                values = jobRepository.findByCandidatesToJobContainsAndIsDeleted(user, Boolean.FALSE);
-                UtilsValidation.ifNullOrEmpty(values, new HashSet<>()).forEach(v -> v.setCandidatesToJob(null));
-            }
-            case ENTERPRISE -> values = jobRepository.findByEnterprise_IdAndIsDeletedIs(user.getId(), Boolean.FALSE);
-        }
-
-        if (UtilsValidation.isNullOrEmpty(values)) {
-            throw new NotFoundException(String.format(
-                    "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
-                    id, name, uniqueKey, isDeleted
-            ));
-        }
-
-        logger.info("Finished Get All Jobs for User...");
-        return new OperationData<>(values, null);
-    }
-
     public OperationData<?> candidateUserInJob(CandidaturePayload value) throws Exception {
         logger.info("Candidate User in Job...");
 

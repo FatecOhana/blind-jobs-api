@@ -118,4 +118,21 @@ public class UserRestEndpoint {
         return new ResponseEntity<>(userService.findAllRegisterV2(userType), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all User Jobs", description = "if UserType is EMPRESA, all candidatures for the company " +
+            "will be displayed. But if UserType is ESTUDANTE, all candidatures of student will be displayed")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User candidatures", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
+    @GetMapping(value = "api/v1/user/job", produces = "application/json")
+    public ResponseEntity<OperationData<?>> getAllUserCandidatures(@RequestParam(required = false) String id,
+                                                                   @RequestParam(required = false) String uniqueName,
+                                                                   @RequestParam(required = false) String name,
+                                                                   @RequestParam(required = false) boolean isDeleted,
+                                                                   @Parameter(name = "userType", required = true,
+                                                                           schema = @Schema(implementation = UserType.class),
+                                                                           description = "UserType value of users that will be searched"
+                                                                   ) @RequestParam UserType userType) throws Exception {
+        UUID uuid = UtilsOperation.convertStringToUUID(id);
+        return new ResponseEntity<>(userService.findAllJobsOfUser(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
+    }
+
 }

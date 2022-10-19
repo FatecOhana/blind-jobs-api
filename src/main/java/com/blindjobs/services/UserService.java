@@ -1,6 +1,8 @@
 package com.blindjobs.services;
 
+import com.blindjobs.database.models.entities.Job;
 import com.blindjobs.database.models.entities.User;
+import com.blindjobs.database.repositories.entities.JobRepository;
 import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
@@ -13,19 +15,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService implements UniqueRegisterOperationsInterface<User> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final JobRepository jobRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JobRepository jobRepository) {
         this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
     }
 
     @Override
@@ -154,5 +155,35 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
     public OperationData<?> findAllRegisterV2(UserType userType) {
         return new OperationData<>(new HashSet<>(userRepository.findAllByUserType(userType)), null);
     }
+
+    public OperationData<Job> findAllJobsOfUser(UUID id, String name, String uniqueKey, UserType userType, boolean isDeleted)
+            throws Exception {
+        logger.info("Get All Jobs for User...");
+
+        User user = this.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
+                .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
+                        "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                        id, name, uniqueKey, isDeleted)));
+
+        Set<Job> values = null;
+        switch (userType) {
+            case STUDENT -> {
+                values = jobRepository.findByCandidatesToJobContainsAndIsDeleted(user, Boolean.FALSE);
+                UtilsValidation.ifNullOrEmpty(values, new HashSet<>()).forEach(v -> v.setCandidatesToJob(null));
+            }
+            case ENTERPRISE -> values = jobRepository.findByEnterprise_IdAndIsDeletedIs(user.getId(), Boolean.FALSE);
+        }
+
+        if (UtilsValidation.isNullOrEmpty(values)) {
+            throw new NotFoundException(String.format(
+                    "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
+                    id, name, uniqueKey, isDeleted
+            ));
+        }
+
+        logger.info("Finished Get All Jobs for User...");
+        return new OperationData<>(values, null);
+    }
+
 
 }
