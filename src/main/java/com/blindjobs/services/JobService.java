@@ -94,7 +94,9 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
     @Override
-    public OperationData<?> findManyMatchRegisters(Set<UUID> id, Set<String> name, Set<String> uniqueKey, Object type, Boolean isDeleted) throws Exception {
+    public OperationData<?> findManyMatchRegisters(
+            Set<UUID> id, Set<String> name, Set<String> uniqueKey, Object type, Boolean isDeleted
+    ) throws Exception {
         throw new NotImplementedException("method \"findManyMatchRegisters\" in JobService not Implemented. Check findRegister");
     }
 
@@ -180,7 +182,9 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
     }
 
     @Override
-    public OperationData<Job> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
+    public OperationData<Job> findRegister(
+            UUID id, String name, String uniqueKey, Object type, Boolean isDeleted
+    ) throws Exception {
         logger.info("Get Register...");
 
         Job job = null;

@@ -5,11 +5,9 @@ import com.blindjobs.dto.CandidaturePayload;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.Payload;
 import com.blindjobs.dto.SingleItemPayload;
-import com.blindjobs.dto.types.UserType;
 import com.blindjobs.services.JobService;
 import com.blindjobs.utils.UtilsOperation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,7 +52,9 @@ public class JobRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Job Deleted", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @DeleteMapping(value = "api/v1/job", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> softDeleteJob(@RequestBody SingleItemPayload<UUID> jobPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> softDeleteJob(
+            @RequestBody SingleItemPayload<UUID> jobPayload
+    ) throws Exception {
         return new ResponseEntity<>(jobService.softDeleteRegister(jobPayload.getData()), HttpStatus.OK);
     }
 
@@ -70,10 +70,12 @@ public class JobRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching job values", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/job", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getJob(@RequestParam(required = false) String id,
-                                                   @RequestParam(required = false) String uniqueName,
-                                                   @RequestParam(required = false) String name,
-                                                   @RequestParam(required = false) boolean isDeleted) throws Exception {
+    public ResponseEntity<OperationData<?>> getJob(
+            @RequestParam(required = false) String id,
+            @RequestParam(required = false) String uniqueName,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) boolean isDeleted
+    ) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(jobService.findRegister(uuid, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }
@@ -82,10 +84,12 @@ public class JobRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching job values", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/job/manyMatch", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getJobWithManyMatch(@RequestParam(required = false) Set<String> id,
-                                                                @RequestParam(required = false) Set<String> uniqueName,
-                                                                @RequestParam(required = false) Set<String> name,
-                                                                @RequestParam(required = false) boolean isDeleted) throws Exception {
+    public ResponseEntity<OperationData<?>> getJobWithManyMatch(
+            @RequestParam(required = false) Set<String> id,
+            @RequestParam(required = false) Set<String> uniqueName,
+            @RequestParam(required = false) Set<String> name,
+            @RequestParam(required = false) boolean isDeleted
+    ) throws Exception {
         Set<UUID> uuids = UtilsOperation.convertStringsToUUIDs(id);
         return new ResponseEntity<>(jobService.findManyMatchRegisters(uuids, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }
@@ -98,13 +102,13 @@ public class JobRestEndpoint {
         return new ResponseEntity<>(jobService.findAllRegister(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Candidate User in Job",
-            description = "Is necessary pass the User and Job ID")
+    @Operation(summary = "Candidate User in Job", description = "Is necessary pass the User and Job ID")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User candidate in Job", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/job/candidate", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> candidateInJob(@RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload)
-            throws Exception {
+    public ResponseEntity<OperationData<?>> candidateInJob(
+            @RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload
+    ) throws Exception {
         return new ResponseEntity<>(jobService.candidateUserInJob(candidaturePayload.getData()), HttpStatus.OK);
     }
 

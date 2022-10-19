@@ -5,7 +5,6 @@ import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
 import com.blindjobs.services.AddressService;
 import com.blindjobs.utils.UtilsOperation;
-import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,7 +32,9 @@ public class AddressRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Address Created or Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/address", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<Address> addressPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> upsertUser(
+            @RequestBody SingleItemPayload<Address> addressPayload
+    ) throws Exception {
         return new ResponseEntity<>(addressService.upsertRegister(addressPayload.getData()), HttpStatus.OK);
     }
 
@@ -41,7 +42,9 @@ public class AddressRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Address Deleted", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @DeleteMapping(value = "api/v1/address", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> softDeleteUser(@RequestBody SingleItemPayload<UUID> addressPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> softDeleteUser(
+            @RequestBody SingleItemPayload<UUID> addressPayload
+    ) throws Exception {
         return new ResponseEntity<>(addressService.softDeleteRegister(addressPayload.getData()), HttpStatus.OK);
     }
 
@@ -49,10 +52,10 @@ public class AddressRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching  address values", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/address", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
-                                                    @RequestParam(required = false) String uniqueName,
-                                                    @RequestParam(required = false) String name,
-                                                    @RequestParam(required = false) boolean isDeleted) throws Exception {
+    public ResponseEntity<OperationData<?>> getUser(
+            @RequestParam(required = false) String id, @RequestParam(required = false) String uniqueName,
+            @RequestParam(required = false) String name, @RequestParam(required = false) boolean isDeleted
+    ) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(addressService.findRegister(uuid, name, uniqueName, null, isDeleted), HttpStatus.OK);
     }

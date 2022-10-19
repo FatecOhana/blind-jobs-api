@@ -31,7 +31,9 @@ public class AuthRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User checked", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/login", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> genericLoginV1(@RequestBody SingleItemPayload<Login> loginPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> genericLoginV1(
+            @RequestBody SingleItemPayload<Login> loginPayload
+    ) throws Exception {
         return new ResponseEntity<>(authService.checkCredential(loginPayload.getData()), HttpStatus.OK);
     }
 

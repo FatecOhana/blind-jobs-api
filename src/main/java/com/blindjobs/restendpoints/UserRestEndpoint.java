@@ -80,7 +80,9 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Users Created or Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @PostMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> upsertUser(@RequestBody SingleItemPayload<User> userPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> upsertUser(
+            @RequestBody SingleItemPayload<User> userPayload
+    ) throws Exception {
         return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
     }
 
@@ -88,7 +90,9 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Users Deleted", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @DeleteMapping(value = "api/v1/user", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<OperationData<?>> softDeleteUser(@RequestBody SingleItemPayload<UUID> userPayload) throws Exception {
+    public ResponseEntity<OperationData<?>> softDeleteUser(
+            @RequestBody SingleItemPayload<UUID> userPayload
+    ) throws Exception {
         return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
     }
 
@@ -96,13 +100,14 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Matching  user values", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getUser(@RequestParam(required = false) String id,
-                                                    @RequestParam(required = false) String uniqueName,
-                                                    @RequestParam(required = false) String name,
-                                                    @Parameter(schema = @Schema(implementation = UserType.class),
-                                                            description = "UserType value of users that will be searched",
-                                                            name = "userType") @RequestParam UserType userType,
-                                                    @RequestParam(required = false) boolean isDeleted) throws Exception {
+    public ResponseEntity<OperationData<?>> getUser(
+            @RequestParam(required = false) String id,
+            @RequestParam(required = false) String uniqueName,
+            @RequestParam(required = false) String name,
+            @Parameter(description = "UserType value of users that will be searched", name = "userType",
+                    schema = @Schema(implementation = UserType.class)) @RequestParam UserType userType,
+            @RequestParam(required = false) boolean isDeleted
+    ) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(userService.findRegister(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }
@@ -113,8 +118,9 @@ public class UserRestEndpoint {
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user/all", produces = "application/json")
     public ResponseEntity<OperationData<?>> getAllUser(
-            @Parameter(name = "userType", description = "UserType value of users that will be searched", schema = @Schema(
-                    implementation = UserType.class)) @RequestParam UserType userType) {
+            @Parameter(name = "userType", description = "UserType value of users that will be searched",
+                    schema = @Schema(implementation = UserType.class)) @RequestParam UserType userType
+    ) {
         return new ResponseEntity<>(userService.findAllRegisterV2(userType), HttpStatus.OK);
     }
 
@@ -123,14 +129,12 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All User candidatures", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user/job", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getAllUserCandidatures(@RequestParam(required = false) String id,
-                                                                   @RequestParam(required = false) String uniqueName,
-                                                                   @RequestParam(required = false) String name,
-                                                                   @RequestParam(required = false) boolean isDeleted,
-                                                                   @Parameter(name = "userType", required = true,
-                                                                           schema = @Schema(implementation = UserType.class),
-                                                                           description = "UserType value of users that will be searched"
-                                                                   ) @RequestParam UserType userType) throws Exception {
+    public ResponseEntity<OperationData<?>> getAllUserCandidatures(
+            @RequestParam(required = false) String id, @RequestParam(required = false) String uniqueName,
+            @RequestParam(required = false) String name, @RequestParam(required = false) boolean isDeleted,
+            @Parameter(name = "userType", required = true, schema = @Schema(implementation = UserType.class),
+                    description = "UserType value of users that will be searched") @RequestParam UserType userType
+    ) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
         return new ResponseEntity<>(userService.findAllJobsOfUser(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
     }

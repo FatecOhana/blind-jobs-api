@@ -93,7 +93,9 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
     }
 
     @Override
-    public OperationData<User> findRegister(UUID id, String name, String uniqueKey, Object type, Boolean isDeleted) throws Exception {
+    public OperationData<User> findRegister(
+            UUID id, String name, String uniqueKey, Object type, Boolean isDeleted
+    ) throws Exception {
         logger.info("Get Register...");
 
         UserType userType;
@@ -156,8 +158,9 @@ public class UserService implements UniqueRegisterOperationsInterface<User> {
         return new OperationData<>(new HashSet<>(userRepository.findAllByUserType(userType)), null);
     }
 
-    public OperationData<Job> findAllJobsOfUser(UUID id, String name, String uniqueKey, UserType userType, boolean isDeleted)
-            throws Exception {
+    public OperationData<Job> findAllJobsOfUser(
+            UUID id, String name, String uniqueKey, UserType userType, boolean isDeleted
+    ) throws Exception {
         logger.info("Get All Jobs for User...");
 
         User user = this.findRegister(id, name, uniqueKey, userType, isDeleted).getData()
