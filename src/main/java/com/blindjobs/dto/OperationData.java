@@ -35,6 +35,7 @@ public class OperationData<T> {
      */
     public OperationData(T data) {
         this.data = Collections.singleton(data);
+        this.total = UtilsValidation.isNull(data) ? null : 1L;
     }
 
     /**

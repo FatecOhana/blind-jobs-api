@@ -1,6 +1,7 @@
 package com.blindjobs.database.models.entities;
 
 import com.blindjobs.database.models.complement.Address;
+import com.blindjobs.database.models.complement.Skill;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
@@ -93,9 +94,10 @@ public class Job {
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
     private Set<User> candidatesToJob = new HashSet<>();
 
-//    private Set<Benefits> benefits;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Skill.class)
+    private Set<Skill> requiredSkills = new HashSet<>();
 
-//    private Set<Skills> requiredSkills;
+//    private Set<Benefits> benefits;
 
     @Override
     public boolean equals(Object obj) {
