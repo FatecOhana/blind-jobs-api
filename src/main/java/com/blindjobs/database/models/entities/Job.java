@@ -49,6 +49,10 @@ public class Job {
     @Column(nullable = false)
     private String description;
 
+    @Schema(description = "number of peoples to be hired", defaultValue = "1", example = "5")
+    @Column(nullable = false)
+    private Integer peopleToHired = 1;
+
     // Work Specifications
     @Schema(description = "period of working", example = "TARDE")
     @Enumerated(EnumType.STRING)
