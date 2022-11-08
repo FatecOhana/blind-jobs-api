@@ -109,7 +109,17 @@ public class JobRestEndpoint {
     public ResponseEntity<OperationData<?>> candidateInJob(
             @RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload
     ) throws Exception {
-        return new ResponseEntity<>(jobService.candidateUserInJob(candidaturePayload.getData()), HttpStatus.OK);
+        return new ResponseEntity<>(jobService.userCandidatureOperation(candidaturePayload.getData(), Boolean.FALSE), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Choose User to Job", description = "Is necessary pass the User and Job ID")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "User candidate in Job", content = @Content(
+            mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
+    @PostMapping(value = "api/v1/job/chooseCandidate", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<OperationData<?>> selectCandidature(
+            @RequestBody SingleItemPayload<CandidaturePayload> candidaturePayload
+    ) throws Exception {
+        return new ResponseEntity<>(jobService.userCandidatureOperation(candidaturePayload.getData(), Boolean.TRUE), HttpStatus.OK);
     }
 
 }

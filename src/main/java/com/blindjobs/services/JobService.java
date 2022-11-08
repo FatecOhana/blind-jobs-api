@@ -221,8 +221,8 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
         return new OperationData<>(new HashSet<>(jobRepository.findAll()), null);
     }
 
-    public OperationData<?> candidateUserInJob(CandidaturePayload value) throws Exception {
-        logger.info("Candidate User in Job...");
+    public OperationData<?> userCandidatureOperation(CandidaturePayload value, Boolean chosenStudent) throws Exception {
+        logger.info("User Candidature Operations...");
 
         if (UtilsValidation.isNull(value) || UtilsValidation.isNull(value.getJob()) || UtilsValidation.isNull(value.getUser())) {
             logger.error(String.format(
@@ -242,13 +242,17 @@ public class JobService implements ManyRegisterOperationsInterface<Job> {
                         UserType.STUDENT, value.getUser().getIsDeleted())));
 
         Job job = value.getJob();
-
         Job jobDatabase = this.findRegister(job.getId(), job.getTitle(), job.getIdentifierName(), null, Boolean.FALSE)
                 .getData().stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(
                         "not found values in database to combination id=[%s], name=[%s], username=[%s], isDeleted=[%s]",
                         job.getId(), job.getTitle(), job.getIdentifierName(), job.getIsDeleted())));
 
-        jobDatabase.addCandidate(userDatabase);
+        if (Boolean.TRUE.equals(chosenStudent)) {
+            jobDatabase.addChosenStudent(userDatabase);
+        } else {
+            jobDatabase.addCandidate(userDatabase);
+        }
+
         jobRepository.save(jobDatabase);
 
         logger.info("Finished Candidated User in Job...");

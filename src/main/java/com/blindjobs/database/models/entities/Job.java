@@ -2,6 +2,7 @@ package com.blindjobs.database.models.entities;
 
 import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.database.models.complement.Skill;
+import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.dto.types.ContractType;
 import com.blindjobs.dto.types.DayPeriod;
 import com.blindjobs.dto.types.WorkModel;
@@ -13,10 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -98,6 +96,9 @@ public class Job {
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
     private Set<User> candidatesToJob = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+    private Set<User> chosenStudents = new HashSet<>();
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Skill.class)
     private Set<Skill> requiredSkills = new HashSet<>();
 
@@ -124,6 +125,29 @@ public class Job {
         }
 
         this.setCandidatesToJob(candidatesSet);
+    }
+
+    public void addChosenStudent(User user) throws NotFoundException {
+        if (UtilsValidation.isNull(user)) return;
+
+        boolean userIsCandidated = UtilsValidation.ifNullOrEmpty(this.getCandidatesToJob(), new HashSet<>())
+                .stream().anyMatch(v -> Objects.equals(v.getId(), user.getId()));
+
+        if (!userIsCandidated) {
+            throw new NotFoundException(String.format(
+                    "the user isn't a candidate in Job. Try to apply for it and then choose it." +
+                            "\nid=[%s], name=[%s], username=[%s], isDeleted=[%s]", user.getId(), user.getName(),
+                    user.getIdentifierName(), user.getIsDeleted()));
+        }
+
+        Set<User> students = this.getChosenStudents();
+        if (!UtilsValidation.isNullOrEmpty(students)) {
+            students.add(user);
+        } else {
+            students = new HashSet<>(List.of(user));
+        }
+
+        this.setChosenStudents(students);
     }
 
     @Override
