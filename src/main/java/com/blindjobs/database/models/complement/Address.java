@@ -39,7 +39,4 @@ public class Address {
     @Column(nullable = false)
     private String cep;
 
-    @Schema(description = "optional address complement", example = "Bl 1, Apto 1512")
-    private String complement;
-
 }
