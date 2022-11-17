@@ -43,3 +43,4 @@ my.log
 database/dev
 
 *.gz
+printed_script.sql
