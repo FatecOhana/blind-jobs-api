@@ -3,9 +3,13 @@ package com.blindjobs.restendpoints;
 import com.blindjobs.database.models.entities.User;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.SingleItemPayload;
+import com.blindjobs.dto.command.DeleteItemCommand;
+import com.blindjobs.dto.command.FindItemByParameterCommand;
+import com.blindjobs.dto.command.UpsertItemCommand;
 import com.blindjobs.dto.types.UserType;
-import com.blindjobs.services.UserService;
+import com.blindjobs.services.UserServiceV2;
 import com.blindjobs.utils.UtilsOperation;
+import com.blindjobs.utils.UtilsValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +28,11 @@ import java.util.UUID;
 
 @RestController
 @Tag(name = "User", description = "Endpoint to manipulate and manage users and their data")
-public class UserRestEndpoint {
+public class UserRestEndpointV2 {
 
-    private final UserService userService;
+    private final UserServiceV2 userService;
 
-    public UserRestEndpoint(UserService userService) {
+    public UserRestEndpointV2(UserServiceV2 userService) {
         this.userService = userService;
     }
 
@@ -83,7 +88,8 @@ public class UserRestEndpoint {
     public ResponseEntity<OperationData<?>> upsertUser(
             @RequestBody SingleItemPayload<User> userPayload
     ) throws Exception {
-        return new ResponseEntity<>(userService.upsertRegister(userPayload.getData()), HttpStatus.OK);
+        UpsertItemCommand<User> command = UpsertItemCommand.<User>builder().data(userPayload).build();
+        return new ResponseEntity<>(userService.upsertRegister(command), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete (Soft-Delete) one Users", description = "You only need to enter the Users's ID in the request body")
@@ -93,7 +99,8 @@ public class UserRestEndpoint {
     public ResponseEntity<OperationData<?>> softDeleteUser(
             @RequestBody SingleItemPayload<UUID> userPayload
     ) throws Exception {
-        return new ResponseEntity<>(userService.softDeleteRegister(userPayload.getData()), HttpStatus.OK);
+        DeleteItemCommand command = DeleteItemCommand.builder().id(UtilsValidation.ifNull(userPayload, new SingleItemPayload<UUID>()).getData()).build();
+        return new ResponseEntity<>(userService.softDeleteRegister(command), HttpStatus.OK);
     }
 
     @Operation(summary = "Get database user values", description = "You must enter one of the filter values")
@@ -109,7 +116,10 @@ public class UserRestEndpoint {
             @RequestParam(required = false) boolean isDeleted
     ) throws Exception {
         UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(userService.findRegister(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
+        FindItemByParameterCommand find = FindItemByParameterCommand.builder()
+                .id(uuid).name(name).uniqueKey(uniqueName).type(userType).isDeleted(isDeleted)
+                .build();
+        return new ResponseEntity<>(userService.findRegister(find), HttpStatus.OK);
     }
 
     // TODO ALLOW ONLY FOR MASTER ADMIN
@@ -117,11 +127,8 @@ public class UserRestEndpoint {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "All Users Registers", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationData.class))))
     @GetMapping(value = "api/v1/user/all", produces = "application/json")
-    public ResponseEntity<OperationData<?>> getAllUser(
-            @Parameter(name = "userType", description = "UserType value of users that will be searched",
-                    schema = @Schema(implementation = UserType.class)) @RequestParam UserType userType
-    ) {
-        return new ResponseEntity<>(userService.findAllRegisterV2(userType), HttpStatus.OK);
+    public ResponseEntity<OperationData<?>> getAllUser() throws Exception {
+        return new ResponseEntity<>(userService.findAllRegister(), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all User Jobs", description = "if UserType is EMPRESA, all candidatures for the company " +
@@ -135,8 +142,7 @@ public class UserRestEndpoint {
             @Parameter(name = "userType", required = true, schema = @Schema(implementation = UserType.class),
                     description = "UserType value of users that will be searched") @RequestParam UserType userType
     ) throws Exception {
-        UUID uuid = UtilsOperation.convertStringToUUID(id);
-        return new ResponseEntity<>(userService.findAllJobsOfUser(uuid, name, uniqueName, userType, isDeleted), HttpStatus.OK);
+        throw new NotImplementedException("Not implemented getAllUserCandidatures");
     }
 
 }
