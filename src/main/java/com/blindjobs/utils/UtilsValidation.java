@@ -16,7 +16,7 @@ public class UtilsValidation {
         return isNull(v) || v.isEmpty() || v.isBlank();
     }
 
-    public static Object ifNull(Object valueNullable, Object valueIfNull) {
+    public static <T> T ifNull(T valueNullable, T valueIfNull) {
         return isNull(valueNullable) ? valueIfNull : valueNullable;
     }
 
