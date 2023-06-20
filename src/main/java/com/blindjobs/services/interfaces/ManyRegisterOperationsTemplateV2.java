@@ -12,12 +12,12 @@ public interface ManyRegisterOperationsTemplateV2<T> extends UniqueRegisterOpera
     /**
      * CREATE many object (if object not exists) or UPDATE the existing objects
      */
-    OperationData<?> upsertRegisters(UpsertItemsCommand<T> value) throws Exception;
+    OperationData<?> upsertRegisters(UpsertItemsCommand<T> command) throws Exception;
 
     /**
      * Sets true in tag isDeleted in many object of table
      */
-    OperationData<UUID> softDeleteRegisters(DeleteItemsCommand value) throws Exception;
+    OperationData<UUID> softDeleteRegisters(DeleteItemsCommand command) throws Exception;
 
     /**
      * Find Matches Register in Database
