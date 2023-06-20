@@ -1,6 +1,7 @@
 package com.blindjobs.services.interfaces;
 
 import com.blindjobs.dto.OperationData;
+import com.blindjobs.dto.command.DeleteItemCommand;
 import com.blindjobs.dto.command.FindItemByParameterCommand;
 import com.blindjobs.dto.command.UpsertItemCommand;
 
@@ -11,22 +12,22 @@ public interface UniqueRegisterOperationsTemplateV2<T> {
     /**
      * CREATE one object (if object not exists) or UPDATE the existing object
      */
-    OperationData<?> upsertRegister(UpsertItemCommand<T> value) throws Exception;
+    OperationData<?> upsertRegister(UpsertItemCommand<T> command) throws Exception;
 
     /**
      * Sets true in tag isDeleted in specify object of table
      */
-    OperationData<UUID> softDeleteRegister(UUID value) throws Exception;
+    OperationData<UUID> softDeleteRegister(DeleteItemCommand command) throws Exception;
 
     /**
      * Update one register in Database
      */
-    OperationData<?> updateRegister(UpsertItemCommand<T> value) throws Exception;
+    OperationData<?> updateRegister(UpsertItemCommand<T> command) throws Exception;
 
     /**
      * Create one Register in Database
      */
-    OperationData<?> createRegister(UpsertItemCommand<T> value) throws Exception;
+    OperationData<?> createRegister(UpsertItemCommand<T> command) throws Exception;
 
     /**
      * Find Matches Register in Database
