@@ -7,7 +7,7 @@ import com.blindjobs.database.repositories.entities.UserRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.dto.types.UserType;
-import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
+import com.blindjobs.services.interfaces.UniqueRegisterOperationsTemplate;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserService implements UniqueRegisterOperationsInterface<User> {
+public class UserService implements UniqueRegisterOperationsTemplate<User> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;

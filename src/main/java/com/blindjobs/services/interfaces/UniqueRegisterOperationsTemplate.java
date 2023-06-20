@@ -4,7 +4,7 @@ import com.blindjobs.dto.OperationData;
 
 import java.util.UUID;
 
-public interface UniqueRegisterOperationsInterface<T> {
+public interface UniqueRegisterOperationsTemplate<T> {
 
     /**
      * CREATE one object (if object not exists) or UPDATE the existing object

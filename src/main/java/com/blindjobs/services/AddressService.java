@@ -4,7 +4,7 @@ import com.blindjobs.database.models.complement.Address;
 import com.blindjobs.database.repositories.complement.AddressRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
-import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
+import com.blindjobs.services.interfaces.UniqueRegisterOperationsTemplate;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AddressService implements UniqueRegisterOperationsInterface<Address> {
+public class AddressService implements UniqueRegisterOperationsTemplate<Address> {
 
     private static final Logger logger = LoggerFactory.getLogger(AddressService.class);
     private final AddressRepository addressRepository;

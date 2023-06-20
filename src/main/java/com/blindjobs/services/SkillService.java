@@ -4,7 +4,7 @@ import com.blindjobs.database.models.complement.Skill;
 import com.blindjobs.database.repositories.complement.SkillRepository;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
-import com.blindjobs.services.interfaces.UniqueRegisterOperationsInterface;
+import com.blindjobs.services.interfaces.UniqueRegisterOperationsTemplate;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class SkillService implements UniqueRegisterOperationsInterface<Skill> {
+public class SkillService implements UniqueRegisterOperationsTemplate<Skill> {
 
     private static final Logger logger = LoggerFactory.getLogger(SkillService.class);
     private final SkillRepository skillRepository;

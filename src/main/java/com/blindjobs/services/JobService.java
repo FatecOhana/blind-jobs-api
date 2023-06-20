@@ -8,7 +8,7 @@ import com.blindjobs.dto.CandidaturePayload;
 import com.blindjobs.dto.OperationData;
 import com.blindjobs.dto.exceptions.NotFoundException;
 import com.blindjobs.dto.types.UserType;
-import com.blindjobs.services.interfaces.ManyRegisterOperationsInterface;
+import com.blindjobs.services.interfaces.ManyRegisterOperationsTemplate;
 import com.blindjobs.utils.UtilsValidation;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class JobService implements ManyRegisterOperationsInterface<Job> {
+public class JobService implements ManyRegisterOperationsTemplate<Job> {
 
     private static final Logger logger = LoggerFactory.getLogger(JobService.class);
     private final JobRepository jobRepository;

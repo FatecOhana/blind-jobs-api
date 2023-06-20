@@ -5,7 +5,7 @@ import com.blindjobs.dto.OperationData;
 import java.util.Set;
 import java.util.UUID;
 
-public interface ManyRegisterOperationsInterface<T> extends UniqueRegisterOperationsInterface<T> {
+public interface ManyRegisterOperationsTemplate<T> extends UniqueRegisterOperationsTemplate<T> {
 
     /**
      * CREATE many object (if object not exists) or UPDATE the existing objects
